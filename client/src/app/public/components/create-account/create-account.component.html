@@ -1,0 +1,112 @@
+<div class="row">
+    <div class="col-12">
+        <button mat-stroked-button type="button" (click)="goToLogin()">
+            Go to Login
+        </button>
+    </div>
+</div>
+<mat-card class="mt-3">
+    <mat-card-content class="row">
+        <mat-card-title class="col-12">
+            Create Account
+        </mat-card-title>
+        <form class="col-12" [formGroup]="form" (ngSubmit)="createUser()">
+            <div class="row">
+                <mat-form-field class="col-12 py-1">
+                    <input matInput type="email" id="email" placeholder="Email" formControlName="email">
+                    <mat-error *ngIf="email.touched && email.hasError('required')">
+                        Email is required
+                    </mat-error>
+                    <mat-error *ngIf="email.touched && email.hasError('email')">
+                        Email is not valid
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="col-12 py-1">
+                    <input matInput type="text" id="username" placeholder="Username" formControlName="username">
+                    <mat-error *ngIf="username.touched && username.hasError('required')">
+                        Username is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="col-sm-6 col-12 py-1">
+                    <input matInput type="password" id="password" placeholder="Password" formControlName="password">
+                    <mat-error *ngIf="password.touched && password.hasError('required')">
+                        Password is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="col-sm-6 col-12 py-1">
+                    <input matInput type="password" id="passwordConfirm" placeholder="Confirm Password"
+                        formControlName="passwordConfirm">
+                    <mat-error *ngIf="passwordConfirm.touched && passwordConfirm.hasError('required')">
+                        Confirmed Password is required
+                    </mat-error>
+                </mat-form-field>
+
+                <div class="col-12">
+                    <mat-error *ngIf="passwordConfirm.touched && form.hasError('passwordsNotMatching')">
+                        <small>Passwords are not matching</small>
+                    </mat-error>
+                </div>
+
+                <div class="col-12">
+                    <mat-hint>
+                        <small>
+                            If you forget your password, the following security question and answer will
+                            be used to reset it.
+                        </small>
+                    </mat-hint>
+                </div>
+
+                <mat-form-field class="col-12 py-1">
+                    <mat-label>Select Security Question</mat-label>
+                    <mat-select formControlName="securityQuestion" id="securityQuestion">
+                        <mat-option *ngFor="let option of securityQuestions" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="securityQuestion.touched && securityQuestion.hasError('required')">
+                        Security Question is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="col-sm-6 col-12 py-1">
+                    <input matInput type="password" id="securityAnswer" placeholder="Security Answer"
+                        formControlName="securityAnswer" autocomplete="off">
+                    <mat-error *ngIf="securityAnswer.touched && securityAnswer.hasError('required')">
+                        Security Answer is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="col-sm-6 col-12 py-1">
+                    <input matInput type="password" id="securityAnswerConfirm" placeholder="Confirm Security Answer"
+                        formControlName="securityAnswerConfirm" autocomplete="off">
+                    <mat-error *ngIf="securityAnswerConfirm.touched && securityAnswerConfirm.hasError('required')">
+                        Confirmed Security Answer is required
+                    </mat-error>
+                </mat-form-field>
+
+                <div *ngIf="securityAnswerConfirm.touched && form.hasError('securityAnswersNotMatching')"
+                    class="col-12">
+                    <mat-error>
+                        <small>Security answers are not matching</small>
+                    </mat-error>
+                </div>
+
+                <div class="col-sm-8 col-12 pt-2">
+                    <mat-hint *ngIf="!form.valid">
+                        <small>Please fill out all required information.</small>
+                    </mat-hint>
+                </div>
+
+                <div class="col-sm-4 col-12 pt-2 text-right">
+                    <button mat-stroked-button color="primary" type="submit" [disabled]="!form.valid">
+                        Create
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

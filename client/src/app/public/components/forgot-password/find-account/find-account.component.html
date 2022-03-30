@@ -1,0 +1,64 @@
+<div class="row">
+    <div class="col-12">
+        <button mat-stroked-button type="button" (click)="goToLogin()">
+            Go to Login
+        </button>
+    </div>
+</div>
+<div class="container">
+    <mat-card class="mt-3">
+        <mat-card-content>
+            <div class="row">
+                <mat-card-title class="col-12">
+                    Find Account
+                </mat-card-title>
+                <form class="col-12" [formGroup]="form" (ngSubmit)="findAccount()">
+                    <div class="row">
+                        <mat-form-field class="col-sm-9 col-12 pr-sm-0  align-self-center">
+                            <input matInput id="email" type="email" placeholder="Email" formControlName="email">
+                            <mat-error *ngIf="email.touched && email.hasError('required')">
+                                Email is required
+                            </mat-error>
+                            <mat-error *ngIf="email.touched && email.hasError('email')">
+                                Email is not valid
+                            </mat-error>
+                        </mat-form-field>
+
+                        <div class="col-sm-3 col-12 pl-sm-0 text-sm-right text-center align-self-center">
+                            <button mat-stroked-button color="primary" type="submit" [disabled]="!form.valid">
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div *ngIf="foundUser" @dropInOut class="col-12">
+                    <div class="row">
+                        <hr class="w-100 my-3">
+                        <div class="col-sm-9 col-12 pb-sm-0 pb-2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5 class="text-sm-left text-center">
+                                        Is this your username?
+                                    </h5>
+                                </div>
+                                <div class="col-12 text-sm-left text-center">
+                                    <mat-hint>
+                                        {{foundUser?.username}}
+                                    </mat-hint>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-12 text-sm-right text-center align-self-center">
+                            <button mat-stroked-button color="primary" type="button" [disabled]="!foundUser"
+                                (click)="goToSecurityCheck()">
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
