@@ -7,8 +7,8 @@ import { RoomEntity } from './models/room/room.entity';
 import { RoomService } from './services/room/room.service';
 import { ConnectedUserService } from './services/connected-user/connected-user.service';
 import { MessageEntity } from './models/message/message.entity';
-import { JoinedRoomEntity } from './models/joined-room/joined-room.entity';
-import { JoinedRoomService } from './services/joined-room/joined-room.service';
+import { ConnectedUserRoomEntity } from './models/connected-user-room/connected-user-room.entity';
+import { ConnectedUserRoomService } from './services/connected-user-room/connected-user-room.service';
 import { ConnectedUserEntity } from './models/connected-user/connected-user.entity';
 import { MessageService } from './services/message/message.service';
 
@@ -20,9 +20,9 @@ import { MessageService } from './services/message/message.service';
       RoomEntity,
       ConnectedUserEntity,
       MessageEntity,
-      JoinedRoomEntity
+      ConnectedUserRoomEntity,
     ])
   ],
-  providers: [ChatGateway, RoomService, ConnectedUserService, JoinedRoomService, MessageService]
+  providers: [ChatGateway, RoomService, ConnectedUserService, ConnectedUserRoomService, MessageService]
 })
 export class ChatModule { }

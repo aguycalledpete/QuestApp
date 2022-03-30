@@ -5,12 +5,12 @@ import { AuthenticationService } from 'src/authentication/service/authentication
 import { UserI } from 'src/user/models/user.interface';
 import { UserService } from 'src/user/service/user-service/user.service';
 import { ConnectedUserI } from '../models/connected-user/connected-user.interface';
-import { JoinedRoomI } from '../models/joined-room/joined-room.interface';
+import { ConnectedUserRoomI } from '../models/connected-user-room/connected-user-room.interface';
 import { MessageI } from '../models/message/message.interface';
 import { PageI } from '../models/page/page.interface';
 import { RoomI } from '../models/room/room.interface';
 import { ConnectedUserService } from '../services/connected-user/connected-user.service';
-import { JoinedRoomService } from '../services/joined-room/joined-room.service';
+import { ConnectedUserRoomService } from '../services/connected-user-room/connected-user-room.service';
 import { MessageService } from '../services/message/message.service';
 import { RoomService } from '../services/room/room.service';
 
@@ -33,13 +33,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     private userService: UserService,
     private roomService: RoomService,
     private connectedUserService: ConnectedUserService,
-    private joinedRoomService: JoinedRoomService,
+    private ConnectedUserRoomService: ConnectedUserRoomService,
     private messageService: MessageService
   ) { }
 
   async onModuleInit() {
     await this.connectedUserService.deleteAll();
-    await this.joinedRoomService.deleteAll();
+    await this.ConnectedUserRoomService.deleteAll();
   }
 
   async handleConnection(socket: Socket) {
@@ -115,24 +115,24 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     // subtract page -1 to match angular material paginator
     messages.meta.currentPage--;
     // save connection to room
-    await this.joinedRoomService.create({ socketId: socket.id, user: socket.data.user, room })
+    await this.ConnectedUserRoomService.create({ socketId: socket.id, user: socket.data.user, room })
     //send most recent messages to user
     await this.server.to(socket.id).emit('messages', messages);
   }
 
   @SubscribeMessage('leaveRoom')
   async onLeaveRoom(socket: Socket) {
-    // remove connection from joined rooms
-    await this.joinedRoomService.deleteBySocketId(socket.id);
+    // remove connection from connected user rooms
+    await this.ConnectedUserRoomService.deleteBySocketId(socket.id);
   }
 
   @SubscribeMessage('addMessage')
   async onAddMessage(socket: Socket, message: MessageI) {
     const createdMessage: MessageI = await this.messageService.create({ ...message, user: socket.data.user });
     const room: RoomI = await this.roomService.getRoom(createdMessage.room.id);
-    const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(room);
-    // Send message to all joined users 
-    for (const user of joinedUsers) {
+    const connectedUserRooms: ConnectedUserRoomI[] = await this.ConnectedUserRoomService.findByRoom(room);
+    // Send message to all connected users 
+    for (const user of connectedUserRooms) {
       await this.server.to(user.socketId).emit('messageAdded', createdMessage);
     }
   }

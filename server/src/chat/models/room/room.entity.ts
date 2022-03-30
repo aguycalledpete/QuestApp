@@ -1,6 +1,6 @@
 import { UserEntity } from "src/user/models/user.entity";
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { JoinedRoomEntity } from "../joined-room/joined-room.entity";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { ConnectedUserRoomEntity } from "../connected-user-room/connected-user-room.entity";
 import { MessageEntity } from "../message/message.entity";
 
 @Entity()
@@ -18,8 +18,12 @@ export class RoomEntity {
     @JoinTable()
     users: UserEntity[];
 
-    @OneToMany(() => JoinedRoomEntity, joinedRoom => joinedRoom.room)
-    joinedUsers: JoinedRoomEntity[];
+    // @ManyToOne(() => UserEntity)
+    // @JoinTable()
+    // creator: UserEntity;
+
+    @OneToMany(() => ConnectedUserRoomEntity, connectedUser => connectedUser.room)
+    connectedUsers: ConnectedUserRoomEntity[];
 
     @OneToMany(() => MessageEntity, message => message.room)
     messages: MessageEntity[];

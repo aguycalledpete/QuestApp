@@ -23,12 +23,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('ngOnInit');
     this.chatService.emitPaginateRooms();
   }
 
   ngAfterViewInit(): void {
-    console.log('ngAfterViewInit');
     this.chatService.emitPaginateRooms();
   }
 

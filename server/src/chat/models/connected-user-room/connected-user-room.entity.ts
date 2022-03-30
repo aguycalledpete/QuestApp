@@ -3,18 +3,18 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "t
 import { RoomEntity } from "../room/room.entity";
 
 @Entity()
-export class JoinedRoomEntity {
+export class ConnectedUserRoomEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
     socketId: string;
 
-    @ManyToOne(() => UserEntity, user => user.joinedRooms)
+    @ManyToOne(() => UserEntity, user => user.connectedRooms)
     @JoinColumn()
     user: UserEntity;
 
-    @ManyToOne(()=> RoomEntity, room => room.joinedUsers)
+    @ManyToOne(()=> RoomEntity, room => room.connectedUsers)
     @JoinColumn()
     room: RoomEntity;
 }
