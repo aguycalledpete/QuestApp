@@ -4,6 +4,7 @@ import { MessageEntity } from "src/chat/models/message/message.entity";
 import { RoomEntity } from "src/chat/models/room/room.entity";
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { FriendRequestEntity } from "./friend-request/friend-request.entity";
+import { AddedUserRoomEntity } from "src/chat/models/added-user-room/added-user-room.entity";
 
 @Entity()
 export class UserEntity {
@@ -25,11 +26,11 @@ export class UserEntity {
     @Column({ select: false })
     securityAnswer: string;
 
-    @ManyToMany(() => RoomEntity, room => room.users)
-    rooms: RoomEntity[];
-
     @OneToMany(() => ConnectedUserEntity, connection => connection.user)
     connections: ConnectedUserEntity[]
+
+    @OneToMany(() => AddedUserRoomEntity, addedUser => addedUser.user)
+    rooms: AddedUserRoomEntity[];
 
     @OneToMany(() => ConnectedUserRoomEntity, connectedRoom => connectedRoom.room)
     connectedRooms: ConnectedUserRoomEntity[];

@@ -6,6 +6,7 @@ export interface RoomI {
     name?: string;
     description?: string;
     users?: UserI[];
+    isPublic?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
 }

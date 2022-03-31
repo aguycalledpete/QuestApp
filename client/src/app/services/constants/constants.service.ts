@@ -16,8 +16,8 @@ export class ConstantsService {
 
   // sockets
   SOCKET_TO_ADD_MESSAGE: string = 'addMessage';
-  SOCKET_TO_JOIN_ROOM: string = 'joinRoom';
-  SOCKET_TO_LEAVE_ROOM: string = 'leaveRoom';
+  SOCKET_TO_OPEN_ROOM: string = 'openRoom';
+  SOCKET_TO_CLOSE_ROOM: string = 'closeRoom';
   SOCKET_TO_PAGINATE_ROOMS: string = 'paginateRooms';
   SOCKET_TO_CREATE_ROOM: string = 'createRoom';
   SOCKET_FROM_ROOMS: string = 'rooms';

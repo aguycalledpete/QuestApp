@@ -11,6 +11,8 @@ import { ConnectedUserRoomEntity } from './models/connected-user-room/connected-
 import { ConnectedUserRoomService } from './services/connected-user-room/connected-user-room.service';
 import { ConnectedUserEntity } from './models/connected-user/connected-user.entity';
 import { MessageService } from './services/message/message.service';
+import { AddedUserRoomEntity } from './models/added-user-room/added-user-room.entity';
+import { AddedUserRoomService } from './services/added-user-room/added-user-room.service';
 
 @Module({
   imports: [
@@ -21,8 +23,16 @@ import { MessageService } from './services/message/message.service';
       ConnectedUserEntity,
       MessageEntity,
       ConnectedUserRoomEntity,
+      AddedUserRoomEntity,
     ])
   ],
-  providers: [ChatGateway, RoomService, ConnectedUserService, ConnectedUserRoomService, MessageService]
+  providers: [
+    ChatGateway,
+    RoomService,
+    ConnectedUserService,
+    ConnectedUserRoomService,
+    MessageService,
+    AddedUserRoomService
+  ]
 })
 export class ChatModule { }

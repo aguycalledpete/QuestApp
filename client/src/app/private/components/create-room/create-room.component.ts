@@ -14,7 +14,7 @@ export class CreateRoomComponent {
   form: FormGroup = new FormGroup({
     name: new FormControl(null, [Validators.required]),
     description: new FormControl(null),
-    users: new FormArray([], [Validators.required]),
+    users: new FormArray([]),
   });
 
   constructor(

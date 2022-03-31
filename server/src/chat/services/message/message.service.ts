@@ -18,11 +18,11 @@ export class MessageService {
         return this.messageRepository.save(this.messageRepository.create(message));
     }
 
-    async findMessagesForRoom(room: RoomI, options: IPaginationOptions): Promise<Pagination<MessageI>> {
+    async findMessagesForRoom(roomId: number, options: IPaginationOptions): Promise<Pagination<MessageI>> {
         const query = this.messageRepository
             .createQueryBuilder('message')
             .leftJoin('message.room', 'room')
-            .where('room.id = :roomId', { roomId: room.id })
+            .where('room.id = :roomId', { roomId })
             .leftJoinAndSelect('message.user', 'user')
             .orderBy('message.createdAt', 'DESC');
 

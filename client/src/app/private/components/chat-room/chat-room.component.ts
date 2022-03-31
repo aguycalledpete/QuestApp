@@ -48,14 +48,14 @@ export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit {
     if (!this.chatRoom) {
       return;
     }
-    this.chatService.joinRoom(this.chatRoom);
+    this.chatService.openRoom(this.chatRoom);
   }
 
   ngOnDestroy(): void {
     if (!this.chatRoom) {
       return;
     }
-    this.chatService.leaveRoom(this.chatRoom);
+    this.chatService.closeRoom(this.chatRoom);
   }
 
   sendMessage(): void {

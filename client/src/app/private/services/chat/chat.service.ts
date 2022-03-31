@@ -23,12 +23,12 @@ export class ChatService {
     this.socket.emit(this.constantsService.SOCKET_TO_ADD_MESSAGE, message);
   }
 
-  joinRoom(room: RoomI): void {
-    this.socket.emit(this.constantsService.SOCKET_TO_JOIN_ROOM, room);
+  openRoom(room: RoomI): void {
+    this.socket.emit(this.constantsService.SOCKET_TO_OPEN_ROOM, room);
   }
 
-  leaveRoom(room: RoomI): void {
-    this.socket.emit(this.constantsService.SOCKET_TO_LEAVE_ROOM, room);
+  closeRoom(room: RoomI): void {
+    this.socket.emit(this.constantsService.SOCKET_TO_CLOSE_ROOM, room);
   }
 
   getMessages(): Observable<MessagePaginateI> {

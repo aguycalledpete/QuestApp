@@ -4,7 +4,6 @@ import { Server, Socket } from 'socket.io';
 import { AuthenticationService } from 'src/authentication/service/authentication.service';
 import { UserI } from 'src/user/models/user.interface';
 import { UserService } from 'src/user/service/user-service/user.service';
-import { ConnectedUserI } from '../models/connected-user/connected-user.interface';
 import { ConnectedUserRoomI } from '../models/connected-user-room/connected-user-room.interface';
 import { MessageI } from '../models/message/message.interface';
 import { PageI } from '../models/page/page.interface';
@@ -13,6 +12,8 @@ import { ConnectedUserService } from '../services/connected-user/connected-user.
 import { ConnectedUserRoomService } from '../services/connected-user-room/connected-user-room.service';
 import { MessageService } from '../services/message/message.service';
 import { RoomService } from '../services/room/room.service';
+import { AddedUserRoomI } from '../models/added-user-room/added-user-room.interface';
+import { AddedUserRoomService } from '../services/added-user-room/added-user-room.service';
 
 @WebSocketGateway({
   cors: {
@@ -24,6 +25,7 @@ import { RoomService } from '../services/room/room.service';
   },
 })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, OnModuleInit {
+  readonly defaultPagination = { page: 1, limit: 10 };
 
   @WebSocketServer()
   server: Server;
@@ -34,7 +36,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     private roomService: RoomService,
     private connectedUserService: ConnectedUserService,
     private ConnectedUserRoomService: ConnectedUserRoomService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private addedUserRoomService: AddedUserRoomService
   ) { }
 
   async onModuleInit() {
@@ -47,16 +50,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       const decodedToken = await this.authenticationService.verifyJwt(
         socket.handshake.headers.authorization,
       );
-      const user: UserI = await this.userService.findOneById(decodedToken.user.id);
+      const user = await this.userService.findOneById(decodedToken.user.id);
       if (!user) {
         return this.disconnect(socket);
       }
 
       socket.data.user = user;
-      const rooms = await this.roomService.getRoomsForUser(user.id, {
-        page: 1,
-        limit: 10,
-      });
+      const rooms = await this.roomService.getRoomsForUser(user.id, this.defaultPagination);
       // subtract page -1 to match angular material paginator
       rooms.meta.currentPage--;
 
@@ -82,15 +82,28 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   }
 
   @SubscribeMessage('createRoom')
-  async onCreateRoom(socket: Socket, room: RoomI) {
-    const createdRoom: RoomI = await this.roomService.createRoom(room, socket.data.user);
+  async onCreateRoom(socket: Socket, room: RoomI, users: UserI[] = []) {
+    if (!socket || !room) {
+      return;
+    }
 
-    for (const user of createdRoom.users) {
-      const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
-      const rooms = await this.roomService.getRoomsForUser(user.id, { page: 1, limit: 10 });
+    const creator: UserI = socket.data.user;
+    users.push(creator);
+    room.creator = creator;
+
+    const usersToAdd = await this.addedUserRoomService.addUsersToRoom(users, room);
+    room.users = usersToAdd;
+    const createdRoom = await this.roomService.createRoom(room);
+
+    for (const addedUser of createdRoom.users) {
+      const user = addedUser.user;
+      const connections = await this.connectedUserService.findByUser(user);
+      if (connections.length == 0) {
+        continue;
+      }
+      const rooms = await this.roomService.getRoomsForUser(user.id, this.defaultPagination);
       // subtract page -1 to match angular material paginator
       rooms.meta.currentPage--;
-
       for (const connection of connections) {
         await this.server.to(connection.socketId).emit('rooms', rooms);
       }
@@ -99,38 +112,43 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   @SubscribeMessage('paginateRooms')
   async onPaginateRoom(socket: Socket, page: PageI) {
-    const paginationOptions: PageI = this.handleIncomingPageRequest(page);
-    const rooms = await this.roomService.getRoomsForUser(
-      socket.data.user.id,
-      paginationOptions,
-    );
+    const paginationOptions = this.handleIncomingPageRequest(page);
+    const user: UserI = socket.data.user;
+    const rooms = await this.roomService.getRoomsForUser(user.id, paginationOptions);
     // subtract page -1 to match angular material paginator
     rooms.meta.currentPage--;
     return this.server.to(socket.id).emit('rooms', rooms);
   }
 
-  @SubscribeMessage('joinRoom')
-  async onJoinRoom(socket: Socket, room: RoomI) {
-    const messages = await this.messageService.findMessagesForRoom(room, { limit: 10, page: 1 });
+  @SubscribeMessage('openRoom')
+  async onOpenRoom(socket: Socket, room: RoomI) {
+    const messages = await this.messageService.findMessagesForRoom(room.id, this.defaultPagination);
     // subtract page -1 to match angular material paginator
     messages.meta.currentPage--;
     // save connection to room
-    await this.ConnectedUserRoomService.create({ socketId: socket.id, user: socket.data.user, room })
+    const connectedUserRoom: ConnectedUserRoomI = {
+      socketId: socket.id,
+      user: socket.data.user,
+      room
+    };
+    await this.ConnectedUserRoomService.create(connectedUserRoom)
     //send most recent messages to user
     await this.server.to(socket.id).emit('messages', messages);
   }
 
-  @SubscribeMessage('leaveRoom')
-  async onLeaveRoom(socket: Socket) {
+  @SubscribeMessage('closeRoom')
+  async onCloseRoom(socket: Socket) {
     // remove connection from connected user rooms
     await this.ConnectedUserRoomService.deleteBySocketId(socket.id);
   }
 
   @SubscribeMessage('addMessage')
   async onAddMessage(socket: Socket, message: MessageI) {
-    const createdMessage: MessageI = await this.messageService.create({ ...message, user: socket.data.user });
-    const room: RoomI = await this.roomService.getRoom(createdMessage.room.id);
-    const connectedUserRooms: ConnectedUserRoomI[] = await this.ConnectedUserRoomService.findByRoom(room);
+    const user: UserI = socket.data.user;
+    message.user = user;
+    const createdMessage = await this.messageService.create(message);
+    const room = await this.roomService.getRoom(createdMessage.room.id);
+    const connectedUserRooms = await this.ConnectedUserRoomService.findByRoom(room);
     // Send message to all connected users 
     for (const user of connectedUserRooms) {
       await this.server.to(user.socketId).emit('messageAdded', createdMessage);
@@ -140,7 +158,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   private handleIncomingPageRequest(page: PageI) {
     page.limit = page.limit > 100 ? 100 : page.limit;
     // add page +1 to match angular material paginator
-    page.page = page.page + 1;
+    page.page++;
     return page;
   }
 }

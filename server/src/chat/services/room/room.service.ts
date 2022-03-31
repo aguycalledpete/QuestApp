@@ -14,35 +14,28 @@ export class RoomService {
         private readonly roomRepository: Repository<RoomEntity>
     ) { }
 
-    async createRoom(room: RoomI, creator: UserI): Promise<RoomI> {
-        const newRoom = await this.addCreatorToRoom(room, creator);
-        return this.roomRepository.save(newRoom);
+    async createRoom(room: RoomI): Promise<RoomI> {
+        const createdRoom = await this.roomRepository.save(room);
+        return createdRoom;
     }
 
     async getRoom(roomId: number): Promise<RoomI> {
-        return this.roomRepository.findOne(roomId, {
+        const foundRoom = this.roomRepository.findOne(roomId, {
             relations: ['users']
         });
+        return foundRoom;
     }
 
     async getRoomsForUser(userId: number, options: IPaginationOptions): Promise<Pagination<RoomI>> {
         const query = this.roomRepository
-            // .createQueryBuilder('room')
-            // .leftJoin('room.users', 'user')
-            // .where('user.id = :userId', { userId })
-            // .orderBy('room.updatedAt', 'DESC');
             .createQueryBuilder('room')
-            .leftJoin('room.users', 'users')
-            .where('users.id = :userId', { userId })
-            .leftJoinAndSelect('room.users', 'all_users')
+            .innerJoin('added_user_room_entity', 'addedUserRoom', 'addedUserRoom.roomId = room.id')
+            .innerJoinAndSelect('user_entity', 'user', 'addedUserRoom.userId = user.id')
+            .where('user.id = :userId', { userId })
             .orderBy('room.updatedAt', 'DESC');
 
-        return paginate(query, options);
-    }
-
-    async addCreatorToRoom(room: RoomI, creator: UserI): Promise<RoomI> {
-        room.users.push(creator);
-        return room;
+        const result = paginate(query, options);
+        return result;
     }
 
 }
