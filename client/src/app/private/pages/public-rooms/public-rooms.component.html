@@ -1,13 +1,18 @@
 <div class="d-flex flex-column">
-    <div id="CreateNewRoom" class="flex-shrink-1 text-center">
-        <button mat-stroked-button type="button" (click)="goToCreateRooms()">
-            <div class="row mx-0">
-                <div>Create New Room</div>
-                <div class="pb-1">
-                    <app-icon icon="add"></app-icon>
+    <div class="row flex-shrink-1">
+        <div class="col-6 align-self-end">
+            <h5 class="m-0">Games Feed</h5>
+        </div>
+        <div id="CreateNewRoom" class="col-6 text-right">
+            <button mat-stroked-button type="button" (click)="goToCreateRooms()">
+                <div class="row mx-0">
+                    <div>Create Room</div>
+                    <div class="pb-1">
+                        <app-icon icon="add"></app-icon>
+                    </div>
                 </div>
-            </div>
-        </button>
+            </button>
+        </div>
     </div>
     <div id="PublicRooms" class="flex-grow-1 pt-3">
         <mat-card>

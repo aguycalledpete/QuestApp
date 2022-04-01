@@ -1,39 +1,46 @@
 <div class="vh-100 d-flex flex-column">
-    <div id="header" class="row mx-0 w-100 flex-shrink-1 min-h-60px">
+    <div id="Header" class="w-100 flex-shrink-1 h-60px">
         <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
     </div>
-    <div class="flex-grow-1">
+    <div class="flex-grow-1 overflow-y-scroll">
         <ng-content></ng-content>
     </div>
 </div>
 
 <ng-template #headerTemplate>
-    <ng-container *ngTemplateOutlet="buttonTemplate;context:{
-        icon: 'videogame_asset', tooltipText: 'Games', route: './private/public-rooms'
-    }">
-    </ng-container>
-    <ng-container *ngTemplateOutlet="buttonTemplate;context:{
-    icon: 'note', tooltipText: 'Notes', route: './private/notes'
-}">
-    </ng-container>
-    <ng-container *ngTemplateOutlet="buttonTemplate;context:{
-    icon: 'message', tooltipText: 'My Games', route: './private/my-rooms'
-}">
-    </ng-container>
-    <ng-container *ngTemplateOutlet="buttonTemplate;context:{
-    icon: 'people', tooltipText: 'Friends', route: './private/friends'
+    <div class="h-100 d-flex align-items-center">
+        <img id="Logo" src="assets/images/QuestAppLogo.png" class="h-100" />
+        <ng-container *ngTemplateOutlet="columnBreak"></ng-container>
+        <ng-container *ngTemplateOutlet="buttonTemplate; context:{
+            icon: 'videogame_asset', text: 'Public Games', route: './private/public-rooms'
         }">
-    </ng-container>
-    <ng-container *ngTemplateOutlet="buttonTemplate;context:{
-    icon: 'person_outline', tooltipText: 'Profile', route: './private/profile'
-}">
-    </ng-container>
+        </ng-container>
+        <ng-container *ngTemplateOutlet="columnBreak"></ng-container>
+        <ng-container *ngTemplateOutlet="buttonTemplate; context:{
+            icon: 'question_answer', text: 'My Rooms', route: './private/my-rooms'
+        }">
+        </ng-container>
+        <ng-container *ngTemplateOutlet="columnBreak"></ng-container>
+        <ng-container *ngTemplateOutlet="buttonTemplate; context:{
+            icon: 'person_outline', text: 'Profile', route: './private/profile'
+        }">
+        </ng-container>
+    </div>
 </ng-template>
 
-<ng-template #buttonTemplate let-icon="icon" let-tooltipText="tooltipText" let-route="route">
-    <div class="button p-0" [matTooltip]="tooltipText">
-        <button mat-button color="primary" type="button" class="p-0 min-w-100 rounded-0" (click)="goToRoute(route)">
-            <app-icon [icon]="icon"></app-icon>
+<ng-template #buttonTemplate let-icon="icon" let-text="text" let-route="route">
+    <div class="h-100">
+        <button mat-button type="button" class="h-100 max-w-100" (click)="goToRoute(route)">
+            <div class="d-flex">
+                <div>{{text}}</div>
+                <div class="pl-2 pb-1">
+                    <app-icon [icon]="icon"></app-icon>
+                </div>
+            </div>
         </button>
     </div>
+</ng-template>
+
+<ng-template #columnBreak>
+    <div class="h-100 column-break"></div>
 </ng-template>

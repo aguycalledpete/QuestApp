@@ -4,9 +4,22 @@
         min-width: ($width *1%) !important;
     }
 }
-@for $width from 0 through 1000 {
+
+@for $width from 0 through 500 {
     .min-w-#{$width}px {
         min-width: #{$width}px !important;
+    }
+}
+
+@for $width from 0 through 100 {
+    .max-w-#{$width} {
+        max-width: ($width *1%) !important;
+    }
+}
+
+@for $width from 0 through 500 {
+    .max-w-#{$width}px {
+        max-width: #{$width}px !important;
     }
 }
 @for $width from 0 through 100 {
@@ -14,7 +27,8 @@
         width: ($width *1%) !important;
     }
 }
-@for $width from 0 through 1000 {
+
+@for $width from 0 through 500 {
     .w-#{$width}px {
         width: #{$width}px !important;
     }
@@ -26,9 +40,21 @@
         min-height: ($height *1%) !important;
     }
 }
-@for $height from 0 through 1000 {
+
+@for $height from 0 through 500 {
     .min-h-#{$height}px {
         min-height: #{$height}px !important;
+    }
+}
+
+@for $height from 0 through 100 {
+    .max-h-#{$height} {
+        max-height: ($height *1%) !important;
+    }
+}
+@for $height from 0 through 500 {
+    .max-h-#{$height}px {
+        max-height: #{$height}px !important;
     }
 }
 @for $height from 0 through 100 {
@@ -36,7 +62,8 @@
         height: ($height *1%) !important;
     }
 }
-@for $height from 0 through 1000 {
+
+@for $height from 0 through 500 {
     .h-#{$height}px {
         height: #{$height}px !important;
     }

@@ -14,7 +14,7 @@
             <div class="row">
                 <mat-form-field color="accent" class="col-12"
                     [ngClass]="{'pb-2': email.touched && email.hasError('required')}">
-                    <input matInput type="email" id="email" placeholder="Email" formControlName="email">
+                    <input matInput type="email" id="Email" placeholder="Email" formControlName="email">
                     <mat-error *ngIf="email.touched && email.hasError('required')">
                         Email is required
                     </mat-error>
@@ -24,7 +24,7 @@
                 </mat-form-field>
 
                 <mat-form-field color="accent" class="col-12">
-                    <input matInput type="text" id="username" placeholder="Username" formControlName="username">
+                    <input matInput type="text" id="Username" placeholder="Username" formControlName="username">
                     <mat-error *ngIf="username.touched && username.hasError('required')">
                         Username is required
                     </mat-error>
@@ -34,14 +34,14 @@
                 </mat-form-field>
 
                 <mat-form-field color="accent" class="col-sm-6 col-12">
-                    <input matInput type="password" id="password" placeholder="Password" formControlName="password">
+                    <input matInput type="password" id="Password" placeholder="Password" formControlName="password">
                     <mat-error *ngIf="password.touched && password.hasError('required')">
                         Password is required
                     </mat-error>
                 </mat-form-field>
 
                 <mat-form-field color="accent" class="col-sm-6 col-12">
-                    <input matInput type="password" id="passwordConfirm" placeholder="Confirm Password"
+                    <input matInput type="password" id="PasswordConfirm" placeholder="Confirm Password"
                         formControlName="passwordConfirm">
                     <mat-error *ngIf="passwordConfirm.touched && passwordConfirm.hasError('required')">
                         Confirmed Password is required
@@ -76,7 +76,7 @@
                 </mat-form-field>
 
                 <mat-form-field color="accent" class="col-sm-6 col-12">
-                    <input matInput type="password" id="securityAnswer" placeholder="Security Answer"
+                    <input matInput type="password" id="SecurityAnswer" placeholder="Security Answer"
                         formControlName="securityAnswer" autocomplete="off">
                     <mat-error *ngIf="securityAnswer.touched && securityAnswer.hasError('required')">
                         Security Answer is required
@@ -84,7 +84,7 @@
                 </mat-form-field>
 
                 <mat-form-field color="accent" class="col-sm-6 col-12">
-                    <input matInput type="password" id="securityAnswerConfirm" placeholder="Confirm Security Answer"
+                    <input matInput type="password" id="SecurityAnswerConfirm" placeholder="Confirm Security Answer"
                         formControlName="securityAnswerConfirm" autocomplete="off">
                     <mat-error *ngIf="securityAnswerConfirm.touched && securityAnswerConfirm.hasError('required')">
                         Confirmed Security Answer is required
