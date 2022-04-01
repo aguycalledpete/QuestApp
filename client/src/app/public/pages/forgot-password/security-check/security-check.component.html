@@ -16,7 +16,7 @@
                     <div class="row">
                         <mat-label class="col-12">{{securityQuestion}}</mat-label>
 
-                        <mat-form-field class="col-sm-6 col-12 py-1">
+                        <mat-form-field color="accent" class="col-sm-6 col-12 py-1">
                             <input matInput type="password" id="securityAnswer" placeholder="Answer"
                                 formControlName="securityAnswer" autocomplete="off">
                             <mat-error *ngIf="securityAnswer.touched && securityAnswer.hasError('required')">
@@ -24,7 +24,7 @@
                             </mat-error>
                         </mat-form-field>
 
-                        <mat-form-field class="col-sm-6 col-12 py-1">
+                        <mat-form-field color="accent" class="col-sm-6 col-12 py-1">
                             <input matInput type="password" id="securityAnswerConfirm" placeholder="Confirm Answer"
                                 formControlName="securityAnswerConfirm" autocomplete="off">
                             <mat-error

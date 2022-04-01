@@ -48,7 +48,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'public-rooms',
+    redirectTo: 'private/public-rooms',
     pathMatch: 'full'
   }
 ];

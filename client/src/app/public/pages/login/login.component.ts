@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserI } from 'src/app/models/interfaces';
 import { AuthenticationService } from '../../services';
+import { CustomValidators } from '../../_helpers/custom-validators';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ import { AuthenticationService } from '../../services';
 export class LoginComponent {
 
   form: FormGroup = new FormGroup({
-    email: new FormControl(null, [Validators.required, Validators.email]),
+    email: new FormControl(null, [Validators.required, CustomValidators.validEmail]),
     password: new FormControl(null, [Validators.required]),
   });
 

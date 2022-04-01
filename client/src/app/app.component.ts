@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { DeviceDetectorService } from './public/services/device-detector/device-detector.service';
+import { DeviceDetectorService } from './services/device-detector/device-detector.service';
 
 @Component({
   selector: 'app-root',

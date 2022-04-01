@@ -14,8 +14,8 @@ import { ConstantsService } from 'src/app/services';
 export class CreateAccountComponent {
 
   form: FormGroup = new FormGroup({
-    email: new FormControl(null, [Validators.required, Validators.email]),
-    username: new FormControl(null, [Validators.required]),
+    email: new FormControl(null, [Validators.required, CustomValidators.validEmail]),
+    username: new FormControl(null, [Validators.required, CustomValidators.noInvalidCharacters]),
     password: new FormControl(null, [Validators.required]),
     passwordConfirm: new FormControl(null, [Validators.required]),
     securityQuestion: new FormControl(null, [Validators.required]),

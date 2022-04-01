@@ -12,31 +12,34 @@
         </mat-card-title>
         <form class="col-12" [formGroup]="form" (ngSubmit)="createUser()">
             <div class="row">
-                <mat-form-field class="col-12 py-1">
+                <mat-form-field color="accent" class="col-12 py-1">
                     <input matInput type="email" id="email" placeholder="Email" formControlName="email">
                     <mat-error *ngIf="email.touched && email.hasError('required')">
                         Email is required
                     </mat-error>
-                    <mat-error *ngIf="email.touched && email.hasError('email')">
+                    <mat-error *ngIf="email.touched && email.hasError('invalidEmail')">
                         Email is not valid
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field class="col-12 py-1">
+                <mat-form-field color="accent" class="col-12 py-1">
                     <input matInput type="text" id="username" placeholder="Username" formControlName="username">
                     <mat-error *ngIf="username.touched && username.hasError('required')">
                         Username is required
                     </mat-error>
+                    <mat-error *ngIf="username.touched && username.hasError('containsInvalidCharacters')">
+                        Username contains invalid characters
+                    </mat-error>
                 </mat-form-field>
 
-                <mat-form-field class="col-sm-6 col-12 py-1">
+                <mat-form-field color="accent" class="col-sm-6 col-12 py-1">
                     <input matInput type="password" id="password" placeholder="Password" formControlName="password">
                     <mat-error *ngIf="password.touched && password.hasError('required')">
                         Password is required
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field class="col-sm-6 col-12 py-1">
+                <mat-form-field color="accent" class="col-sm-6 col-12 py-1">
                     <input matInput type="password" id="passwordConfirm" placeholder="Confirm Password"
                         formControlName="passwordConfirm">
                     <mat-error *ngIf="passwordConfirm.touched && passwordConfirm.hasError('required')">
@@ -59,7 +62,7 @@
                     </mat-hint>
                 </div>
 
-                <mat-form-field class="col-12 py-1">
+                <mat-form-field color="accent" class="col-12 py-1">
                     <mat-label>Select Security Question</mat-label>
                     <mat-select formControlName="securityQuestion" id="securityQuestion">
                         <mat-option *ngFor="let option of securityQuestions" [value]="option">
@@ -71,7 +74,7 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field class="col-sm-6 col-12 py-1">
+                <mat-form-field color="accent" class="col-sm-6 col-12 py-1">
                     <input matInput type="password" id="securityAnswer" placeholder="Security Answer"
                         formControlName="securityAnswer" autocomplete="off">
                     <mat-error *ngIf="securityAnswer.touched && securityAnswer.hasError('required')">
@@ -79,7 +82,7 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field class="col-sm-6 col-12 py-1">
+                <mat-form-field color="accent" class="col-sm-6 col-12 py-1">
                     <input matInput type="password" id="securityAnswerConfirm" placeholder="Confirm Security Answer"
                         formControlName="securityAnswerConfirm" autocomplete="off">
                     <mat-error *ngIf="securityAnswerConfirm.touched && securityAnswerConfirm.hasError('required')">

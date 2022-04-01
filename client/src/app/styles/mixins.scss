@@ -1,0 +1,50 @@
+// width
+@for $width from 0 through 100 {
+    .min-w-#{$width} {
+        min-width: ($width *1%) !important;
+    }
+}
+@for $width from 0 through 1000 {
+    .min-w-#{$width}px {
+        min-width: #{$width}px !important;
+    }
+}
+@for $width from 0 through 100 {
+    .w-#{$width} {
+        width: ($width *1%) !important;
+    }
+}
+@for $width from 0 through 1000 {
+    .w-#{$width}px {
+        width: #{$width}px !important;
+    }
+}
+
+// height
+@for $height from 0 through 100 {
+    .min-h-#{$height} {
+        min-height: ($height *1%) !important;
+    }
+}
+@for $height from 0 through 1000 {
+    .min-h-#{$height}px {
+        min-height: #{$height}px !important;
+    }
+}
+@for $height from 0 through 100 {
+    .h-#{$height} {
+        height: ($height *1%) !important;
+    }
+}
+@for $height from 0 through 1000 {
+    .h-#{$height}px {
+        height: #{$height}px !important;
+    }
+}
+
+// font size
+@for $size from 0 through 100 {
+    .font-size-#{$size}px {
+        font-size: #{$size}px !important;
+    }
+}

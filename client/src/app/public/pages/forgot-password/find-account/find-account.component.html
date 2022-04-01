@@ -14,7 +14,7 @@
                 </mat-card-title>
                 <form class="col-12" [formGroup]="form" (ngSubmit)="findAccount()">
                     <div class="row">
-                        <mat-form-field class="col-sm-9 col-12 pr-sm-0  align-self-center">
+                        <mat-form-field color="accent" class="col-sm-9 col-12 pr-sm-0  align-self-center">
                             <input matInput id="email" type="email" placeholder="Email" formControlName="email">
                             <mat-error *ngIf="email.touched && email.hasError('required')">
                                 Email is required

@@ -1,49 +1,60 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent, CreateAccountComponent } from './components';
-import { CompleteComponent } from './components/forgot-password/complete/complete.component';
-import { FindAccountComponent } from './components/forgot-password/find-account/find-account.component';
-import { NewPasswordComponent } from './components/forgot-password/new-password/new-password.component';
-import { SecurityCheckComponent } from './components/forgot-password/security-check/security-check.component';
+import {
+  CompleteComponent, CreateAccountComponent, FindAccountComponent,
+  LoginComponent, NewPasswordComponent, PublicPagesContainerComponent,
+  SecurityCheckComponent
+} from './pages';
 
 const routes: Routes = [
   {
-    path: 'login',
-    component: LoginComponent
-  },
-  {
-    path: 'create-account',
-    component: CreateAccountComponent
-  },
-  {
-    path: 'forgot-password',
+    path: '',
+    component: PublicPagesContainerComponent,
     children: [
       {
         path: '',
-        redirectTo: 'find-account',
+        redirectTo: 'login',
         pathMatch: 'full'
       },
       {
-        path: 'find-account',
-        component: FindAccountComponent
+        path: 'login',
+        component: LoginComponent
       },
       {
-        path: 'security-check',
-        component: SecurityCheckComponent
+        path: 'create-account',
+        component: CreateAccountComponent
       },
       {
-        path: 'new-password',
-        component: NewPasswordComponent
-      },
-      {
-        path: 'complete',
-        component: CompleteComponent
+        path: 'forgot-password',
+        children: [
+          {
+            path: '',
+            redirectTo: 'find-account',
+            pathMatch: 'full'
+          },
+          {
+            path: 'find-account',
+            component: FindAccountComponent
+          },
+          {
+            path: 'security-check',
+            component: SecurityCheckComponent
+          },
+          {
+            path: 'new-password',
+            component: NewPasswordComponent
+          },
+          {
+            path: 'complete',
+            component: CompleteComponent
+          },
+        ]
       },
     ]
   },
   {
     path: '**',
-    redirectTo: 'login',
+    redirectTo: 'public/login',
     pathMatch: 'full'
   }
 ];

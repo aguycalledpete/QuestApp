@@ -8,7 +8,7 @@
 
                 <form class="col-12" [formGroup]="form" (ngSubmit)="login()">
                     <div class="row">
-                        <mat-form-field class="col-12 py-1">
+                        <mat-form-field color="accent" class="col-12 py-1">
                             <input matInput id="email" type="email" placeholder="Email" formControlName="email">
                             <mat-error *ngIf="email.touched && email.hasError('required')">
                                 Email is required
@@ -18,7 +18,7 @@
                             </mat-error>
                         </mat-form-field>
 
-                        <mat-form-field class="col-12 py-1 pb-2">
+                        <mat-form-field color="accent" class="col-12 py-1 pb-2">
                             <input matInput id="password" type="password" placeholder="Password"
                                 formControlName="password">
                             <mat-error *ngIf="password.touched && password.hasError('required')">

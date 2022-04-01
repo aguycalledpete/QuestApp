@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DeviceDetectorService } from 'src/app/public/services/device-detector/device-detector.service';
+import { DeviceDetectorService } from 'src/app/services/device-detector/device-detector.service';
 
 @Component({
   selector: 'app-private-pages-container',
