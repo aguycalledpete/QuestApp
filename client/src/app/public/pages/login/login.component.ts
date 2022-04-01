@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserI } from 'src/app/models/interfaces';
-import { AuthenticationService } from '../../services';
+import { UserService } from '../../services';
 import { CustomValidators } from '../../_helpers/custom-validators';
 
 @Component({
@@ -18,7 +18,7 @@ export class LoginComponent {
   });
 
   constructor(
-    private authenticationService: AuthenticationService,
+    private userService: UserService,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) { }
@@ -33,7 +33,7 @@ export class LoginComponent {
       password: this.password.value
     };
 
-    const loginResponse = await this.authenticationService.login(userToLogin);
+    const loginResponse = await this.userService.login(userToLogin);
     if (!loginResponse) {
       return;
     }

@@ -12,7 +12,7 @@ export class DeviceDetectorService {
 
   constructor(
   ) {
-    this.isMobileSizeSubject = new BehaviorSubject<boolean>(this.getIsMobileSize());
+    this.isMobileSizeSubject = new BehaviorSubject<boolean>(this.checkIsMobileSize());
     this.isMobileSize = this.isMobileSizeSubject.asObservable();
   }
 
@@ -20,7 +20,18 @@ export class DeviceDetectorService {
     return this.isMobileSize;
   }
 
-  private getIsMobileSize(): boolean {
+  getIsMobileSize(): boolean {
+    return this.isMobileSizeSubject.value;
+  }
+
+  update() {
+    const isMobileSize = this.checkIsMobileSize();
+    if (isMobileSize !== this.isMobileSizeSubject.value) {
+      this.isMobileSizeSubject.next(isMobileSize);
+    }
+  }
+
+  private checkIsMobileSize(): boolean {
     const windowSize = this.getWindowSize();
     const isMobileSize = windowSize <= this.maxMobileSize;
     return isMobileSize;
@@ -28,13 +39,6 @@ export class DeviceDetectorService {
 
   private getWindowSize(): number {
     return window.innerWidth;
-  }
-
-  update() {
-    const isMobileSize = this.getIsMobileSize();
-    if (isMobileSize !== this.isMobileSizeSubject.value) {
-      this.isMobileSizeSubject.next(isMobileSize);
-    }
   }
 
 }

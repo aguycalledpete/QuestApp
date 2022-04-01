@@ -12,7 +12,7 @@ import { RoomService } from '../../services';
 export class CreateRoomComponent {
 
   form: FormGroup = new FormGroup({
-    name: new FormControl(null, [Validators.required]),
+    title: new FormControl(null, [Validators.required]),
     description: new FormControl(null),
     users: new FormArray([]),
   });
@@ -48,8 +48,8 @@ export class CreateRoomComponent {
     this.users.removeAt(userIndex);
   }
 
-  get name(): FormControl {
-    return this.form.get('name') as FormControl;
+  get title(): FormControl {
+    return this.form.get('title') as FormControl;
   }
 
   get description(): FormControl {

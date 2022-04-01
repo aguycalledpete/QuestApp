@@ -24,6 +24,10 @@ export class ConstantsService {
   SOCKET_FROM_MESSAGES: string = 'messages';
   SOCKET_FROM_MESSAGE_ADDED: string = 'messageAdded';
 
+  // local storage
+  STORAGE_TOKEN: string = 'quest_app_token';
+  STORAGE_USER: string = 'user';
+
   SECURITY_QUESTIONS: string[] = [
     'In what city were you born?',
     'What is the name of your favorite pet?',

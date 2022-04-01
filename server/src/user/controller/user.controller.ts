@@ -14,7 +14,7 @@ export class UserController {
   constructor(
     private userService: UserService,
     private userHelperService: UserHelperService,
-  ) {}
+  ) { }
 
   @Post()
   async create(@Body() userDto: CreateUserDto): Promise<UserI> {
@@ -38,14 +38,18 @@ export class UserController {
 
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto): Promise<LoginResponseI> {
-    const userEntity =
-      this.userHelperService.loginUserDtoToEntity(loginUserDto);
-    const jwt = await this.userService.login(userEntity);
-    return {
-      access_token: jwt,
-      token_type: 'jwt',
-      expires_in: 10000,
-    };
+    let loginResponse = {} as LoginResponseI;
+    try {
+      const userEntity = this.userHelperService.loginUserDtoToEntity(loginUserDto);
+      const jwt = await this.userService.login(userEntity);
+      loginResponse.accessToken = jwt;
+      loginResponse.tokenType = 'jwt';
+      loginResponse.expiresIn = 10000;
+      loginResponse.isSuccessful = true;
+    } catch (error) {
+      loginResponse.isSuccessful = false;
+    }
+    return loginResponse;
   }
 
   @Get()

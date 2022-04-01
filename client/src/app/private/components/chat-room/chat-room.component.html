@@ -2,7 +2,7 @@
     <!-- header -->
     <div style="height: 125px;">
         <span style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
-            <h2>{{chatRoom.name}}</h2>
+            <h2>{{chatRoom.title}}</h2>
             <span style="display: flex; flex-direction: row; align-items: center;">
                 <app-icon icon="event"></app-icon>
                 <p style="margin-left: 10px;">{{chatRoom.updatedAt | date}}</p>
@@ -17,7 +17,7 @@
     </div>
     <!-- messages -->
     <div #messages style="background-color: lightgray; height: 400px; overflow-y: scroll;">
-        <span *ngFor="let message of (messagesPaginate$ | async)?.items">
+        <span *ngFor="let message of paginatedMessages?.items">
             <app-chat-message [message]="message"></app-chat-message>
         </span>
     </div>

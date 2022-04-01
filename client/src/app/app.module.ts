@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { ConstantsService, DeviceDetectorService } from './services';
 
 export function tokenGetter() {
-  return localStorage.getItem('QuestAppToken');
+  return localStorage.getItem('quest_app_token');
 }
 
 @NgModule({

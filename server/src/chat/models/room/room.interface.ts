@@ -3,7 +3,7 @@ import { AddedUserRoomI } from "../added-user-room/added-user-room.interface";
 
 export interface RoomI {
     id?: number;
-    name?: string;
+    title?: string;
     description?: string;
     creator?: UserI;
     users?: AddedUserRoomI[];

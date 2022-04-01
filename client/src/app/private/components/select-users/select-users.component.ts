@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subscription, switchMap } from 'rxjs';
 import { UserI } from 'src/app/models/interfaces';
-import { AuthenticationService, DeviceDetectorService, UserService } from 'src/app/public/services';
+import { DeviceDetectorService, UserService } from 'src/app/public/services';
 
 @Component({
   selector: 'app-select-users',
@@ -21,11 +21,10 @@ export class SelectUsersComponent implements OnInit, OnDestroy {
   searchUsername = new FormControl();
   filteredUsers: UserI[] = [];
   selectedUser: UserI = null;
-  loggedInUser: UserI = this.authenticationService.getLoggedInUser();
+  loggedInUser: UserI = this.userService.loggedInUser;
 
   constructor(
     private userService: UserService,
-    private authenticationService: AuthenticationService,
     private deviceDetectorService: DeviceDetectorService
   ) {
     this.subscription = new Subscription();

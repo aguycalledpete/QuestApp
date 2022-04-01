@@ -46,6 +46,6 @@ export class RoomService {
 
   createRoom(room: RoomI): void {
     this.socket.emit(this.constantsService.SOCKET_TO_CREATE_ROOM, room);
-    this.snackBarService.displayMatSnackBar(`Room ${room.name} created successfully`);
+    this.snackBarService.displayMatSnackBar(`Room ${room.title} created successfully`);
   }
 }

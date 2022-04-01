@@ -4,7 +4,7 @@ import { UserI } from "./user.interface";
 
 export interface RoomI {
     id?: number;
-    name?: string;
+    title?: string;
     description?: string;
     creator?: UserI;
     users?: AddedUserRoomI[];

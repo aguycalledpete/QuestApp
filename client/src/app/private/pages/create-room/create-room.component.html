@@ -7,15 +7,15 @@
 
             <form class="col-12" [formGroup]="form" (ngSubmit)="create()">
                 <div class="row">
-                    <mat-form-field color="accent" class="col-12 py-1">
-                        <input matInput type="text" placeholder="Name" formControlName="name">
-                        <mat-error *ngIf="name.touched && name.hasError('required')">
-                            Name is required
+                    <mat-form-field color="accent" class="col-12">
+                        <input matInput type="text" id="RoomTitle" placeholder="Room Title" formControlName="title">
+                        <mat-error *ngIf="title.touched && title.hasError('required')">
+                            Room title is required
                         </mat-error>
                     </mat-form-field>
 
-                    <mat-form-field color="accent" class="col-12 py-1">
-                        <input matInput type="text" placeholder="Description" formControlName="description">
+                    <mat-form-field color="accent" class="col-12">
+                        <input matInput type="text" id="description" placeholder="Description" formControlName="description">
                     </mat-form-field>
 
                     <div class="col-12">
