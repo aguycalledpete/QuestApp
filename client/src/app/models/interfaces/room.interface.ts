@@ -1,3 +1,4 @@
+import { AddedUserRoomI } from "./added-user-room.interface";
 import { MetaI } from "./meta.interface";
 import { UserI } from "./user.interface";
 
@@ -5,8 +6,8 @@ export interface RoomI {
     id?: number;
     name?: string;
     description?: string;
-    users?: UserI[];
-    isPublic?: boolean;
+    creator?: UserI;
+    users?: AddedUserRoomI[];
     createdAt?: Date;
     updatedAt?: Date;
 }

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomI, UserI } from 'src/app/models/interfaces';
-import { ChatService } from '../../services';
+import { RoomService } from '../../services';
 
 @Component({
   selector: 'app-create-room',
@@ -18,7 +18,7 @@ export class CreateRoomComponent {
   });
 
   constructor(
-    private chatService: ChatService,
+    private roomService: RoomService,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) { }
@@ -29,7 +29,7 @@ export class CreateRoomComponent {
     }
 
     const formValue: RoomI = this.form.getRawValue();
-    this.chatService.createRoom(formValue);
+    this.roomService.createRoom(formValue);
     this.router.navigate(['../dashboard'], { relativeTo: this.activatedRoute })
   }
 

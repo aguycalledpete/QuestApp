@@ -12,8 +12,9 @@ import { AuthenticationService, UserService } from 'src/app/public/services';
 export class SelectUsersComponent implements OnInit {
 
   @Input() users: UserI[] = null;
-  @Output() addUser: EventEmitter<UserI> = new EventEmitter<UserI>();
-  @Output() removeUser: EventEmitter<UserI> = new EventEmitter<UserI>();
+  
+  @Output() addUser = new EventEmitter<UserI>();
+  @Output() removeUser = new EventEmitter<UserI>();
 
   searchUsername = new FormControl();
   filteredUsers: UserI[] = [];

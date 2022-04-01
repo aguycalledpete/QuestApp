@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, Simp
 import { FormControl, Validators } from '@angular/forms';
 import { combineLatest, map, Observable, startWith, tap } from 'rxjs';
 import { MessageI, MessagePaginateI, RoomI } from 'src/app/models/interfaces';
-import { ChatService } from '../../services';
+import { RoomService } from '../../services';
 
 @Component({
   selector: 'app-chat-room',
@@ -16,8 +16,8 @@ export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChild('messages') private messagesScroller: ElementRef;
 
   messagesPaginate$: Observable<MessagePaginateI> = combineLatest([
-    this.chatService.getMessages(),
-    this.chatService.getAddedMessage().pipe(
+    this.roomService.getMessages(),
+    this.roomService.getAddedMessage().pipe(
       startWith(null)
     )
   ]).pipe(
@@ -37,7 +37,7 @@ export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit {
   chatMessage: FormControl = new FormControl(null, [Validators.required]);
 
   constructor(
-    private chatService: ChatService
+    private roomService: RoomService
   ) { }
 
   ngAfterViewInit(): void {
@@ -48,14 +48,14 @@ export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit {
     if (!this.chatRoom) {
       return;
     }
-    this.chatService.openRoom(this.chatRoom);
+    this.roomService.openRoom(this.chatRoom);
   }
 
   ngOnDestroy(): void {
     if (!this.chatRoom) {
       return;
     }
-    this.chatService.closeRoom(this.chatRoom);
+    this.roomService.closeRoom(this.chatRoom);
   }
 
   sendMessage(): void {
@@ -63,7 +63,7 @@ export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit {
       text: this.chatMessage.value,
       room: this.chatRoom
     };
-    this.chatService.sendMessage(messageToSend);
+    this.roomService.sendMessage(messageToSend);
     this.chatMessage.reset();
   }
 

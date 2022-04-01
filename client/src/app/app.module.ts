@@ -8,6 +8,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ConstantsService } from './services';
+import { DeviceDetectorService } from './public/services/device-detector/device-detector.service';
 
 export function tokenGetter() {
   return localStorage.getItem('QuestAppToken');
@@ -31,7 +32,8 @@ export function tokenGetter() {
     })
   ],
   providers: [
-    ConstantsService
+    ConstantsService,
+    DeviceDetectorService
   ],
   bootstrap: [AppComponent]
 })

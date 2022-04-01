@@ -10,8 +10,8 @@
         </span>
         <span>
             <h3 style="color: grey;">{{chatRoom.description}}</h3>
-            <span *ngFor="let user of chatRoom.users; let last = last;">
-                {{user.username}}{{last? '':', '}}
+            <span *ngFor="let addedUser of chatRoom.users; let last = last;">
+                {{addedUser.user.username}}{{last? '':', '}}
             </span>
         </span>
     </div>

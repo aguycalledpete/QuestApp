@@ -15,9 +15,15 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
 
 import {
-  DashboardComponent, CreateRoomComponent, SelectUsersComponent,
-  ChatRoomComponent, ChatMessageComponent
+  SelectUsersComponent, ChatRoomComponent, ChatMessageComponent,
+  PageFooterComponent, PageHeaderComponent
 } from './components';
+import {
+  CreateRoomComponent, DashboardComponent, FriendsComponent,
+  MyRoomsComponent, NotesComponent, PrivatePagesContainerComponent,
+  ProfileComponent, PublicRoomsComponent
+} from './pages';
+import { RoomListItemComponent } from './components/room-list-item/room-list-item.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +31,16 @@ import {
     CreateRoomComponent,
     SelectUsersComponent,
     ChatRoomComponent,
-    ChatMessageComponent
+    ChatMessageComponent,
+    PublicRoomsComponent,
+    NotesComponent,
+    MyRoomsComponent,
+    FriendsComponent,
+    ProfileComponent,
+    PageFooterComponent,
+    PageHeaderComponent,
+    PrivatePagesContainerComponent,
+    RoomListItemComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,21 @@
+<ng-container [ngSwitch]="(IsMobileSize$ | async)">
+    <ng-container *ngSwitchCase="true" [ngTemplateOutlet]="mobileContainer"></ng-container>
+    <ng-container *ngSwitchCase="false" [ngTemplateOutlet]="desktopContainer"></ng-container>
+    <ng-container *ngSwitchDefault [ngTemplateOutlet]="desktopContainer"></ng-container>
+</ng-container>
+
+<ng-template #desktopContainer>
+    <app-page-header>
+        <ng-container *ngTemplateOutlet="router"></ng-container>
+    </app-page-header>
+</ng-template>
+
+<ng-template #mobileContainer>
+    <app-page-footer>
+        <ng-container *ngTemplateOutlet="router"></ng-container>
+    </app-page-footer>
+</ng-template>
+
+<ng-template #router>
+    <router-outlet></router-outlet>
+</ng-template>

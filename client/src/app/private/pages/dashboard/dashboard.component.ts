@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { RoomPaginateI, UserI } from 'src/app/models/interfaces';
 import { AuthenticationService } from 'src/app/public/services';
-import { ChatService } from '../../services';
+import { RoomService } from '../../services';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,21 +13,21 @@ import { ChatService } from '../../services';
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
 
-  rooms$: Observable<RoomPaginateI> = this.chatService.getMyRooms();
+  rooms$: Observable<RoomPaginateI> = this.roomService.getMyRooms();
   selectedRoom = null;
   user: UserI = this.authenticationService.getLoggedInUser();
 
   constructor(
-    private chatService: ChatService,
+    private roomService: RoomService,
     private authenticationService: AuthenticationService
   ) { }
 
   ngOnInit(): void {
-    this.chatService.emitPaginateRooms();
+    this.roomService.emitPaginateRooms();
   }
 
   ngAfterViewInit(): void {
-    this.chatService.emitPaginateRooms();
+    this.roomService.emitPaginateRooms();
   }
 
   onSelectRoom(event: MatSelectionListChange): void {
@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   onPaginateRooms(event: PageEvent): void {
-    this.chatService.emitPaginateRooms(event.pageSize, event.pageIndex);
+    this.roomService.emitPaginateRooms(event.pageSize, event.pageIndex);
   }
 
 }

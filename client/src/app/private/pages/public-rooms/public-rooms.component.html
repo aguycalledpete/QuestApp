@@ -1,0 +1,19 @@
+<div class="row">
+    <div id="CreateNewRoom" class="col-12 text-center">
+        <button mat-stroked-button type="button">
+            Create New Room
+        </button>
+    </div>
+    <div id="PublicRooms" class="col-12">
+        <ng-container *ngIf="paginatedRooms?.items.length > 0 else noRooms">
+            <ng-container *ngFor="let room of paginatedRooms?.items">
+                <app-room-list-item [room]="room" buttonText="Join" (onButtonClick)="joinRoom($event)">
+                </app-room-list-item>
+            </ng-container>
+        </ng-container>
+    </div>
+</div>
+
+<ng-template #noRooms>
+    <div>No rooms were found</div>
+</ng-template>

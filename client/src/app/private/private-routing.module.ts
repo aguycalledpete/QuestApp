@@ -1,19 +1,54 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CreateRoomComponent, DashboardComponent } from './components';
+import {
+  PrivatePagesContainerComponent, PublicRoomsComponent, NotesComponent,
+  MyRoomsComponent, FriendsComponent, ProfileComponent,
+  DashboardComponent, CreateRoomComponent
+} from './pages';
 
 const routes: Routes = [
   {
-    path: 'dashboard',
-    component: DashboardComponent
-  },
-  {
-    path: 'create-room',
-    component: CreateRoomComponent
+    path: '',
+    component: PrivatePagesContainerComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'public-rooms',
+        pathMatch: 'full'
+      },
+      {
+        path: 'public-rooms',
+        component: PublicRoomsComponent
+      },
+      {
+        path: 'notes',
+        component: NotesComponent
+      },
+      {
+        path: 'my-rooms',
+        component: MyRoomsComponent
+      },
+      {
+        path: 'friends',
+        component: FriendsComponent
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent
+      },
+      {
+        path: 'create-room',
+        component: CreateRoomComponent
+      },
+    ]
   },
   {
     path: '**',
-    redirectTo: 'dashboard',
+    redirectTo: 'public-rooms',
     pathMatch: 'full'
   }
 ];

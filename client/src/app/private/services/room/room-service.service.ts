@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MessageI, MessagePaginateI, RoomI, RoomPaginateI } from 'src/app/models/interfaces';
-import { ConstantsService, SnackBarService } from 'src/app/services';
+import { MessageI, RoomI, MessagePaginateI, RoomPaginateI } from 'src/app/models/interfaces';
+import { SnackBarService, ConstantsService } from 'src/app/services';
 import { CustomSocket } from '../../sockets/custom-socket';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService {
+export class RoomService {
 
   constructor(
     private socket: CustomSocket,
     private snackBarService: SnackBarService,
     private constantsService: ConstantsService
-  ) { }
-
+    ) { }
+  
   getAddedMessage(): Observable<MessageI> {
     return this.socket.fromEvent<MessageI>(this.constantsService.SOCKET_FROM_MESSAGE_ADDED);
   }
@@ -48,5 +48,4 @@ export class ChatService {
     this.socket.emit(this.constantsService.SOCKET_TO_CREATE_ROOM, room);
     this.snackBarService.displayMatSnackBar(`Room ${room.name} created successfully`);
   }
-
 }
