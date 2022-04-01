@@ -1,21 +1,23 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subscription, switchMap } from 'rxjs';
 import { UserI } from 'src/app/models/interfaces';
-import { AuthenticationService, UserService } from 'src/app/public/services';
+import { AuthenticationService, DeviceDetectorService, UserService } from 'src/app/public/services';
 
 @Component({
   selector: 'app-select-users',
   templateUrl: './select-users.component.html',
   styleUrls: ['./select-users.component.scss']
 })
-export class SelectUsersComponent implements OnInit {
+export class SelectUsersComponent implements OnInit, OnDestroy {
 
   @Input() users: UserI[] = null;
-  
+
   @Output() addUser = new EventEmitter<UserI>();
   @Output() removeUser = new EventEmitter<UserI>();
 
+  subscription: Subscription;
+  isMobileSize: boolean;
   searchUsername = new FormControl();
   filteredUsers: UserI[] = [];
   selectedUser: UserI = null;
@@ -23,10 +25,21 @@ export class SelectUsersComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private authenticationService: AuthenticationService
-  ) { }
+    private authenticationService: AuthenticationService,
+    private deviceDetectorService: DeviceDetectorService
+  ) {
+    this.subscription = new Subscription();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
   ngOnInit(): void {
+    const isMobileSizeSubscription =
+      this.deviceDetectorService.isMobileSizeObservable().subscribe(isMobileSize => this.isMobileSize = isMobileSize);
+    this.subscription.add(isMobileSizeSubscription);
+
     this.searchUsername.valueChanges.pipe(
       debounceTime(500),
       distinctUntilChanged(),

@@ -2,7 +2,7 @@
     <div class="flex-grow-1 overflow-y-scroll">
         <ng-content></ng-content>
     </div>
-    <div id="footer" class="row mx-0 w-100 flex-shrink-1 min-h-">
+    <div id="footer" class="row mx-0 w-100 flex-shrink-1 min-h-60px">
         <ng-container *ngTemplateOutlet="buttonTemplate;context:{
                 icon: 'videogame_asset', tooltipText: 'Games', route: './private/public-rooms'
             }">
@@ -12,7 +12,7 @@
         }">
         </ng-container>
         <ng-container *ngTemplateOutlet="buttonTemplate;context:{
-            icon: 'message', tooltipText: 'My Games', route: './private/my-rooms'
+            icon: 'question_answer', tooltipText: 'My Games', route: './private/my-rooms'
         }">
         </ng-container>
         <ng-container *ngTemplateOutlet="buttonTemplate;context:{
@@ -27,10 +27,10 @@
 </div>
 
 <ng-template #buttonTemplate let-icon="icon" let-tooltipText="tooltipText" let-route="route">
-    <div class="button col p-0 h-100" [matTooltip]="tooltipText">
+    <div class="button col p-0 h-100" [matTooltip]="tooltipText" tooltipClass>
         <button mat-stroked-button color="primary" type="button" class="p-0 min-w-100 rounded-0 h-100"
             (click)="goToRoute(route)">
-            <app-icon [icon]="icon" size="50"></app-icon>
+            <app-icon [icon]="icon" size="30"></app-icon>
         </button>
     </div>
 </ng-template>

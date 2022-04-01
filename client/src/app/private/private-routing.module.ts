@@ -3,8 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import {
   PrivatePagesContainerComponent, PublicRoomsComponent, NotesComponent,
   MyRoomsComponent, FriendsComponent, ProfileComponent,
-  DashboardComponent, CreateRoomComponent
+  CreateRoomComponent
 } from './pages';
+import { RoomComponent } from './pages/room/room.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
         component: PublicRoomsComponent
       },
       {
+        path: 'room',
+        component: RoomComponent
+      },
+      {
         path: 'notes',
         component: NotesComponent
       },
@@ -35,10 +40,6 @@ const routes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent
-      },
-      {
-        path: 'dashboard',
-        component: DashboardComponent
       },
       {
         path: 'create-room',

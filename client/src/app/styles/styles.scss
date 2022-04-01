@@ -20,3 +20,9 @@ body {
 .overflow-y-scroll {
     overflow-y: scroll;
 }
+
+// override mat button padding
+.mat-button-base {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}

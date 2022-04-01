@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class DeviceDetectorService {
 
-  private readonly maxMobileSize = 768;
+  private readonly maxMobileSize = 575;
   private isMobileSize: Observable<boolean>;
   private isMobileSizeSubject: BehaviorSubject<boolean>;
 

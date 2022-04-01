@@ -1,1 +1,1 @@
-export { RoomService } from './room/room-service.service';
+export { RoomService } from './room/room.service';

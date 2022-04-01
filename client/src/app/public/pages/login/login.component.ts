@@ -38,7 +38,7 @@ export class LoginComponent {
       return;
     }
 
-    this.router.navigate(['../../private/dashboard'], { relativeTo: this.activatedRoute });
+    this.router.navigate(['../../private/public-rooms'], { relativeTo: this.activatedRoute });
   }
 
   goToCreateAccount() {

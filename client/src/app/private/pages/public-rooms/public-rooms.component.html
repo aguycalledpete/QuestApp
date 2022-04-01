@@ -1,16 +1,27 @@
-<div class="row">
-    <div id="CreateNewRoom" class="col-12 text-center">
-        <button mat-stroked-button type="button">
-            Create New Room
+<div class="d-flex flex-column">
+    <div id="CreateNewRoom" class="flex-shrink-1 text-center">
+        <button mat-stroked-button type="button" (click)="goToCreateRooms()">
+            <div class="row mx-0">
+                <div>Create New Room</div>
+                <div class="pb-1">
+                    <app-icon icon="add"></app-icon>
+                </div>
+            </div>
         </button>
     </div>
-    <div id="PublicRooms" class="col-12">
-        <ng-container *ngIf="paginatedRooms?.items.length > 0 else noRooms">
-            <ng-container *ngFor="let room of paginatedRooms?.items">
-                <app-room-list-item [room]="room" buttonText="Join" (onButtonClick)="joinRoom($event)">
-                </app-room-list-item>
-            </ng-container>
-        </ng-container>
+    <div id="PublicRooms" class="flex-grow-1 pt-3">
+        <mat-card>
+            <mat-card-content>
+                <ng-container *ngIf="paginatedRooms?.items.length > 0 else noRooms">
+                    <div class="row">
+                        <div *ngFor="let room of paginatedRooms?.items" class="col-12">
+                            <app-room-list-item [room]="room" buttonText="Join" (onButtonClick)="joinRoom($event)">
+                            </app-room-list-item>
+                        </div>
+                    </div>
+                </ng-container>
+            </mat-card-content>
+        </mat-card>
     </div>
 </div>
 

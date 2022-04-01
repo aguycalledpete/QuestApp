@@ -30,7 +30,7 @@ export class CreateRoomComponent {
 
     const formValue: RoomI = this.form.getRawValue();
     this.roomService.createRoom(formValue);
-    this.router.navigate(['../dashboard'], { relativeTo: this.activatedRoute })
+    this.router.navigate(['../my-rooms'], { relativeTo: this.activatedRoute })
   }
 
   addUser(user: UserI): void {

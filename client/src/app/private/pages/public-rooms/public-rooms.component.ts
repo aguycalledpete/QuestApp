@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RoomPaginateI } from 'src/app/models/interfaces';
 import { RoomService } from '../../services';
@@ -14,7 +15,9 @@ export class PublicRoomsComponent implements OnInit, OnDestroy {
   paginatedRooms: RoomPaginateI;
 
   constructor(
-    private roomService: RoomService
+    private roomService: RoomService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
     this.subscription = new Subscription();
   }
@@ -24,14 +27,24 @@ export class PublicRoomsComponent implements OnInit, OnDestroy {
       this.paginatedRooms = paginatedRooms;
     });
     this.subscription.add(getMyRoomsSubscription);
-  }
 
+    this.roomService.emitPaginateRooms();
+  }
+  
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 
-  joinRoom(event: any): void {
+  ngAfterViewInit(): void {
+    this.roomService.emitPaginateRooms();
+  }
 
+  goToCreateRooms(): void {
+    this.router.navigate(['../create-room'], { relativeTo: this.activatedRoute });
+  }
+
+  joinRoom(event: any): void {
+    this.router.navigate(['../room'], { relativeTo: this.activatedRoute });
   }
 
 }

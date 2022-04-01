@@ -1,21 +1,30 @@
-<div class="row room-list-item">
-    <div class="col-6 title">
-        <span class="font-weight-bold">Title: </span>
-        <span>{{room?.name}}</span>
-    </div>
-    <div class="col-6 created-by">
-        <span class="font-weight-bold">Created By: </span>
-        <span>{{room?.creator?.username}}</span>
-    </div>
-    <div class="col-8 description">
-        <ng-container *ngIf="room?.description">
-            <span class="font-weight-bold">Description: </span>
-            <span>{{room?.description}}</span>
-        </ng-container>
-    </div>
-    <div class="col-4 button">
-        <button mat-stroked-button type="button" (click)="buttonClicked($event)">
-            {{buttonText}}
-        </button>
-    </div>
-</div>
+<mat-card class="w-100">
+    <mat-card-content>
+        <div class="row room-list-item">
+            <div class="col-6 title">
+                <span class="font-weight-bold">Title: </span>
+                <span>{{room?.name}}</span>
+            </div>
+            <div class="col-6 created-by">
+                <span class="font-weight-bold">Created By: </span>
+                <span>{{room?.creator?.username}}</span>
+            </div>
+            <div class="col-8 description">
+                <ng-container *ngIf="room?.description">
+                    <span class="font-weight-bold">Description: </span>
+                    <span>{{room?.description}}</span>
+                </ng-container>
+            </div>
+            <div class="col-4 button">
+                <button mat-stroked-button type="button" (click)="buttonClicked($event)">
+                    <div class="row mx-0">
+                        <div>{{buttonText}}</div>
+                        <div class="pb-1">
+                            <app-icon icon="group_add" size="20"></app-icon>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
