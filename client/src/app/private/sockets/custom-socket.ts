@@ -62,7 +62,8 @@ export interface ExtendedSocketIoConfig extends SocketIoConfig {
 }
 
 const config: ExtendedSocketIoConfig = {
-    url: 'http://localhost:3000', options: {
+    url: 'http://localhost:3000',
+    options: {
         extraHeaders: {
             Authorization: tokenGetter()
         }

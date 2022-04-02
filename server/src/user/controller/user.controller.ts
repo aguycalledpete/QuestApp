@@ -72,8 +72,13 @@ export class UserController {
     return this.userService.findOneByEmail(email);
   }
 
+  @Get('/find-forgot-user-by-email')
+  async findForgotUserByEmail(@Query('email') email: string) {
+    return this.userService.findForgotUserByEmail(email);
+  }
+
   @Get('/find-by-username')
-  async findAllByUsername(
+  async findByUsername(
     @Query('username') username: string,
     @Query('findOne') findOne: string,
   ) {

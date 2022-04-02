@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RoomPaginateI } from 'src/app/models/interfaces';
@@ -13,6 +14,7 @@ export class PublicRoomsComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
   paginatedRooms: RoomPaginateI;
+  searchRoom = new FormControl();
 
   constructor(
     private roomService: RoomService,

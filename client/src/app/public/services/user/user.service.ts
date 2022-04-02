@@ -24,17 +24,20 @@ export class UserService {
   }
 
   async login(userToLogin: UserI): Promise<LoginResponseI> {
+    // send login request
     const loginResponse: LoginResponseI = await lastValueFrom(
       this.httpClient.post<LoginResponseI>(this.constantsService.API_LOGIN, userToLogin)
     );
+    // check login response
     if (!loginResponse.isSuccessful) {
       this.snackBarService.displayMatSnackBar(`Login Failed`, 5000);
       return loginResponse;
     }
 
+    // get logged in user
     const loggedInUser = await this.findByEmail(userToLogin.email);
     this.loggedInUser = loggedInUser;
-    this.snackBarService.displayMatSnackBar(`Login Successful`);
+
 
     this.localStorageService.store(this.constantsService.STORAGE_TOKEN, loginResponse.accessToken);
     this.localStorageService.store(this.constantsService.STORAGE_USER, loggedInUser, true);
@@ -45,6 +48,13 @@ export class UserService {
   async findByEmail(email: string): Promise<UserI> {
     const foundUser = await lastValueFrom(
       this.httpClient.get<UserI>(`${this.constantsService.API_FIND_BY_EMAIL}?email=${email}`)
+    );
+    return foundUser;
+  }
+
+  async findForgotUserByEmail(email: string): Promise<UserI> {
+    const foundUser = await lastValueFrom(
+      this.httpClient.get<UserI>(`${this.constantsService.API_FIND_FORGOT_USER_BY_EMAIL}?email=${email}`)
     );
     return foundUser;
   }

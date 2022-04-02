@@ -13,7 +13,15 @@ export class ConnectedUserService {
         private readonly connectedUserRepository: Repository<ConnectedUserEntity>
     ) { }
 
-    async create(connectedUser: ConnectedUserI): Promise<ConnectedUserI> {
+    async save(connectedUser: ConnectedUserI): Promise<ConnectedUserI> {
+        return this.connectedUserRepository.save(connectedUser);
+    }
+
+    async create(socketId: string, user: UserI): Promise<ConnectedUserI> {
+        const connectedUser: ConnectedUserI = {
+            socketId,
+            user
+        };
         return this.connectedUserRepository.save(connectedUser);
     }
 

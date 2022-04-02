@@ -1,7 +1,7 @@
 <div class="d-flex flex-column">
     <div class="row flex-shrink-1">
         <div class="col-6 align-self-end">
-            <h5 class="m-0">Games Feed</h5>
+            <h5 class="m-0">Game Rooms</h5>
         </div>
         <div id="CreateNewRoom" class="col-6 text-right">
             <button mat-stroked-button type="button" (click)="goToCreateRooms()">
@@ -13,13 +13,22 @@
                 </div>
             </button>
         </div>
+        <div class="col-12 d-flex align-items-center">
+            <div class="pr-2 pb-2">Filter:</div>
+            <mat-form-field color="accent">
+                <input matInput type="text" placeholder="Search for Room" [matAutocomplete]="auto"
+                    [formControl]="searchRoom">
+                <mat-autocomplete #auto="matAutocomplete">
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
     </div>
     <div id="PublicRooms" class="flex-grow-1 pt-3">
         <mat-card>
             <mat-card-content>
                 <ng-container *ngIf="paginatedRooms?.items.length > 0 else noRooms">
                     <div class="row">
-                        <div *ngFor="let room of paginatedRooms?.items" class="col-12">
+                        <div *ngFor="let room of paginatedRooms?.items" class="col-12 py-2">
                             <app-room-list-item [room]="room" buttonText="Join" (onButtonClick)="joinRoom($event)">
                             </app-room-list-item>
                         </div>

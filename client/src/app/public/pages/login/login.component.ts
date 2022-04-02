@@ -34,11 +34,11 @@ export class LoginComponent {
     };
 
     const loginResponse = await this.userService.login(userToLogin);
-    if (!loginResponse) {
+    if (!loginResponse.isSuccessful) {
       return;
     }
 
-    this.router.navigate(['../../private/public-rooms'], { relativeTo: this.activatedRoute });
+    this.router.navigate(['../../private/process-login'], { relativeTo: this.activatedRoute });
   }
 
   goToCreateAccount() {

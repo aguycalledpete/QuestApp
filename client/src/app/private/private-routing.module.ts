@@ -1,20 +1,25 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {
-  PrivatePagesContainerComponent, PublicRoomsComponent, NotesComponent,
+  PrivatePagesContainerComponent, PublicRoomsComponent,
   MyRoomsComponent, FriendsComponent, ProfileComponent,
-  CreateRoomComponent
+  CreateRoomComponent,
+  ProcessLoginComponent
 } from './pages';
 import { RoomComponent } from './pages/room/room.component';
 
 const routes: Routes = [
+  {
+    path: 'process-login',
+    component: ProcessLoginComponent
+  },
   {
     path: '',
     component: PrivatePagesContainerComponent,
     children: [
       {
         path: '',
-        redirectTo: 'public-rooms',
+        redirectTo: 'process-login',
         pathMatch: 'full'
       },
       {
@@ -22,34 +27,35 @@ const routes: Routes = [
         component: PublicRoomsComponent
       },
       {
-        path: 'room',
-        component: RoomComponent
-      },
-      {
-        path: 'notes',
-        component: NotesComponent
-      },
-      {
         path: 'my-rooms',
         component: MyRoomsComponent
-      },
-      {
-        path: 'friends',
-        component: FriendsComponent
-      },
-      {
-        path: 'profile',
-        component: ProfileComponent
       },
       {
         path: 'create-room',
         component: CreateRoomComponent
       },
+      {
+        path: 'room',
+        component: RoomComponent
+      },
+      {
+        path: 'profile',
+        children: [
+          {
+            path: '',
+            component: ProfileComponent
+          },
+          {
+            path: 'friends',
+            component: FriendsComponent
+          },
+        ]
+      }
     ]
   },
   {
     path: '**',
-    redirectTo: 'private/public-rooms',
+    redirectTo: 'private/process-login',
     pathMatch: 'full'
   }
 ];

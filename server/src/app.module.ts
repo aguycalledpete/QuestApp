@@ -22,8 +22,13 @@ import { ChatModule } from './chat/chat.module';
     AuthenticationModule,
     ChatModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, UserHelperService],
+  controllers: [
+    AppController
+  ],
+  providers: [
+    AppService,
+    UserHelperService
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
@@ -31,7 +36,7 @@ export class AppModule implements NestModule {
       .apply(AuthenticationMiddleware)
       .exclude(
         { path: '/server/user', method: RequestMethod.POST },
-        { path: '/server/user/login', method: RequestMethod.POST },
+        // { path: '/server/user/login', method: RequestMethod.POST },
         { path: '/server/user/find-one-by-email', method: RequestMethod.GET },
         { path: '/server/user/answer-question', method: RequestMethod.POST },
         { path: '/server/user/reset-password', method: RequestMethod.POST }

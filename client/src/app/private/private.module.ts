@@ -21,11 +21,11 @@ import {
 } from './components';
 import {
   CreateRoomComponent, FriendsComponent,
-  MyRoomsComponent, NotesComponent, PrivatePagesContainerComponent,
-  ProfileComponent, PublicRoomsComponent
+  MyRoomsComponent, PrivatePagesContainerComponent,
+  ProcessLoginComponent, ProfileComponent, PublicRoomsComponent,
+  RoomComponent
 } from './pages';
 import { SharedComponentsModule } from '../components/components.module';
-import { RoomComponent } from './pages/room/room.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +34,6 @@ import { RoomComponent } from './pages/room/room.component';
     ChatRoomComponent,
     ChatMessageComponent,
     PublicRoomsComponent,
-    NotesComponent,
     MyRoomsComponent,
     FriendsComponent,
     ProfileComponent,
@@ -42,7 +41,8 @@ import { RoomComponent } from './pages/room/room.component';
     PageHeaderComponent,
     PrivatePagesContainerComponent,
     RoomListItemComponent,
-    RoomComponent
+    RoomComponent,
+    ProcessLoginComponent
   ],
   imports: [
     CommonModule,

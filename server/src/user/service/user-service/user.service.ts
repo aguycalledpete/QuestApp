@@ -75,6 +75,20 @@ export class UserService {
             return user;
         }
 
+        user = await this.userRepository.findOne({ email });
+        if (!user) {
+            throw new HttpException('Unable to find user', HttpStatus.NOT_FOUND);
+        }
+
+        return user;
+    }
+
+    async findForgotUserByEmail(email: string): Promise<UserI> {
+        let user = {} as UserI;
+        if (!email) {
+            return user;
+        }
+
         user = await this.userRepository.findOne({
             where: { email },
             select: ['id', 'email', 'username', 'securityQuestion']

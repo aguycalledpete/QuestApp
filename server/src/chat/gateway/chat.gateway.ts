@@ -12,7 +12,6 @@ import { ConnectedUserService } from '../services/connected-user/connected-user.
 import { ConnectedUserRoomService } from '../services/connected-user-room/connected-user-room.service';
 import { MessageService } from '../services/message/message.service';
 import { RoomService } from '../services/room/room.service';
-import { AddedUserRoomI } from '../models/added-user-room/added-user-room.interface';
 import { AddedUserRoomService } from '../services/added-user-room/added-user-room.service';
 
 @WebSocketGateway({
@@ -35,50 +34,70 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     private userService: UserService,
     private roomService: RoomService,
     private connectedUserService: ConnectedUserService,
-    private ConnectedUserRoomService: ConnectedUserRoomService,
+    private connectedUserRoomService: ConnectedUserRoomService,
     private messageService: MessageService,
     private addedUserRoomService: AddedUserRoomService
   ) { }
 
   async onModuleInit() {
     await this.connectedUserService.deleteAll();
-    await this.ConnectedUserRoomService.deleteAll();
+    await this.connectedUserRoomService.deleteAll();
   }
 
-  async handleConnection(socket: Socket) {
+  async handleConnection(socket: Socket): Promise<void> {
+    this.connectSocket(socket);
+  }
+
+  async handleDisconnect(socket: Socket): Promise<void> {
+    // remove connection from db
+    this.disconnectUser(socket);
+    this.disconnectSocket(socket);
+  }
+
+  private async disconnectSocket(socket: Socket): Promise<void> {
+    socket.disconnect();
+  }
+
+  private async disconnectUser(socket: Socket): Promise<void> {
+    await this.connectedUserService.deleteBySocketId(socket.id);
+    socket.data.user = null;
+  }
+
+  private async connectSocket(socket: Socket): Promise<boolean> {
+    let isLoginSuccessful = false;
+    
     try {
       const decodedToken = await this.authenticationService.verifyJwt(
-        socket.handshake.headers.authorization,
+        socket.handshake.headers.authorization
       );
-      const user = await this.userService.findOneById(decodedToken.user.id);
-      if (!user) {
-        return this.disconnect(socket);
+      const authorizedUser = await this.userService.findOneById(decodedToken.user.id);
+      if (!authorizedUser) {
+        this.disconnectSocket(socket);
+        return;
       }
 
-      socket.data.user = user;
-      const rooms = await this.roomService.getRoomsForUser(user.id, this.defaultPagination);
-      // subtract page -1 to match angular material paginator
-      rooms.meta.currentPage--;
+      socket.data.user = authorizedUser;
 
       // save connection to db
-      await this.connectedUserService.create({ socketId: socket.id, user });
+      await this.connectedUserService.create(socket.id, authorizedUser);
 
-      //emits rooms to specific connected client
-      return this.server.to(socket.id).emit('rooms', rooms);
+      isLoginSuccessful = true;
     } catch (error) {
-      return this.disconnect(socket);
+      socket.emit('Error', new UnauthorizedException());
+      this.disconnectSocket(socket);
     }
+
+    await this.server.to(socket.id).emit('loginConfirmed', isLoginSuccessful);
   }
 
-  async handleDisconnect(socket: Socket) {
-    // remove connection from db
-    await this.connectedUserService.deleteBySocketId(socket.id);
-    socket.disconnect();
+  @SubscribeMessage('login')
+  async onLogin(socket: Socket) {
+    this.connectSocket(socket);
   }
 
-  private disconnect(socket: Socket) {
-    socket.emit('Error', new UnauthorizedException());
-    socket.disconnect();
+  @SubscribeMessage('logout')
+  async onLogout(socket: Socket) {
+    this.disconnectUser(socket);
   }
 
   @SubscribeMessage('createRoom')
@@ -112,12 +131,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   @SubscribeMessage('paginateRooms')
   async onPaginateRoom(socket: Socket, page: PageI) {
-    const paginationOptions = this.handleIncomingPageRequest(page);
-    const user: UserI = socket.data.user;
-    const rooms = await this.roomService.getRoomsForUser(user.id, paginationOptions);
-    // subtract page -1 to match angular material paginator
-    rooms.meta.currentPage--;
-    return this.server.to(socket.id).emit('rooms', rooms);
+    try {
+      const paginationOptions = this.handleIncomingPageRequest(page);
+      const user: UserI = socket.data.user;
+      const rooms = await this.roomService.getRoomsForUser(user.id, paginationOptions);
+      // subtract page -1 to match angular material paginator
+      rooms.meta.currentPage--;
+      return this.server.to(socket.id).emit('rooms', rooms);
+    } catch (error) {
+      return;
+    }
   }
 
   @SubscribeMessage('openRoom')
@@ -131,7 +154,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       user: socket.data.user,
       room
     };
-    await this.ConnectedUserRoomService.create(connectedUserRoom)
+    await this.connectedUserRoomService.create(connectedUserRoom)
     //send most recent messages to user
     await this.server.to(socket.id).emit('messages', messages);
   }
@@ -139,7 +162,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   @SubscribeMessage('closeRoom')
   async onCloseRoom(socket: Socket) {
     // remove connection from connected user rooms
-    await this.ConnectedUserRoomService.deleteBySocketId(socket.id);
+    await this.connectedUserRoomService.deleteBySocketId(socket.id);
   }
 
   @SubscribeMessage('addMessage')
@@ -148,7 +171,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     message.user = user;
     const createdMessage = await this.messageService.create(message);
     const room = await this.roomService.getRoom(createdMessage.room.id);
-    const connectedUserRooms = await this.ConnectedUserRoomService.findByRoom(room);
+    const connectedUserRooms = await this.connectedUserRoomService.findByRoom(room);
     // Send message to all connected users 
     for (const user of connectedUserRooms) {
       await this.server.to(user.socketId).emit('messageAdded', createdMessage);

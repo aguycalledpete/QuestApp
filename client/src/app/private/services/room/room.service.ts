@@ -9,12 +9,14 @@ import { CustomSocket } from '../../sockets/custom-socket';
 })
 export class RoomService {
 
+  openedRoom: RoomI;
+
   constructor(
     private socket: CustomSocket,
     private snackBarService: SnackBarService,
     private constantsService: ConstantsService
-    ) { }
-  
+  ) { }
+
   getAddedMessage(): Observable<MessageI> {
     return this.socket.fromEvent<MessageI>(this.constantsService.SOCKET_FROM_MESSAGE_ADDED);
   }
@@ -31,11 +33,23 @@ export class RoomService {
     this.socket.emit(this.constantsService.SOCKET_TO_CLOSE_ROOM, room);
   }
 
+  joinRoom(room: RoomI): void {
+    this.socket.emit(this.constantsService.SOCKET_TO_JOIN_ROOM, room);
+  }
+
+  leaveRoom(room: RoomI): void {
+    this.socket.emit(this.constantsService.SOCKET_TO_LEAVE_ROOM, room);
+  }
+
   getMessages(): Observable<MessagePaginateI> {
     return this.socket.fromEvent<MessagePaginateI>(this.constantsService.SOCKET_FROM_MESSAGES);
   }
 
   getMyRooms(): Observable<RoomPaginateI> {
+    return this.socket.fromEvent<RoomPaginateI>(this.constantsService.SOCKET_FROM_ROOMS);
+  }
+
+  getAllRooms(): Observable<RoomPaginateI> {
     return this.socket.fromEvent<RoomPaginateI>(this.constantsService.SOCKET_FROM_ROOMS);
   }
 

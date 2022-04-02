@@ -1,1 +1,35 @@
-<p>my-rooms works!</p>
+<div class="d-flex flex-column">
+    <div class="row flex-shrink-1">
+        <div class="col-6 align-self-end">
+            <h5 class="m-0">My Rooms</h5>
+        </div>
+        <div id="CreateNewRoom" class="col-6 text-right">
+            <button mat-stroked-button type="button" (click)="goToCreateRooms()">
+                <div class="row mx-0">
+                    <div>Create Room</div>
+                    <div class="pb-1">
+                        <app-icon icon="add"></app-icon>
+                    </div>
+                </div>
+            </button>
+        </div>
+    </div>
+    <div id="PublicRooms" class="flex-grow-1 pt-3">
+        <mat-card>
+            <mat-card-content>
+                <ng-container *ngIf="paginatedRooms?.items.length > 0 else noRooms">
+                    <div class="row">
+                        <div *ngFor="let room of paginatedRooms?.items" class="col-12 py-2">
+                            <app-room-list-item [room]="room" buttonText="Join" (onButtonClick)="joinRoom($event)">
+                            </app-room-list-item>
+                        </div>
+                    </div>
+                </ng-container>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<ng-template #noRooms>
+    <div>No rooms were found</div>
+</ng-template>

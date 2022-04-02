@@ -10,14 +10,20 @@ export class ConstantsService {
   API_LOGIN: string = 'server/user/login';
   API_FIND_BY_USERNAME: string = 'server/user/find-by-username';
   API_FIND_BY_EMAIL: string = 'server/user/find-one-by-email';
+  API_FIND_FORGOT_USER_BY_EMAIL: string = 'server/user/find-forgot-user-by-email';
   API_GET_QUESTION: string = 'server/user/get-question';
   API_ANSWER_QUESTION: string = 'server/user/answer-question';
   API_RESET_PASSWORD: string = 'server/user/reset-password';
 
   // sockets
+  SOCKET_TO_LOGIN: string = 'login';
+  SOCKET_FROM_LOGIN_CONFIRMED: string = 'loginConfirmed';
+  SOCKET_TO_LOGOUT: string = 'logout';
   SOCKET_TO_ADD_MESSAGE: string = 'addMessage';
   SOCKET_TO_OPEN_ROOM: string = 'openRoom';
   SOCKET_TO_CLOSE_ROOM: string = 'closeRoom';
+  SOCKET_TO_JOIN_ROOM: string = 'joinRoom';
+  SOCKET_TO_LEAVE_ROOM: string = 'leaveRoom';
   SOCKET_TO_PAGINATE_ROOMS: string = 'paginateRooms';
   SOCKET_TO_CREATE_ROOM: string = 'createRoom';
   SOCKET_FROM_ROOMS: string = 'rooms';
