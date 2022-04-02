@@ -8,7 +8,6 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class RoomService {
-
     constructor(
         @InjectRepository(RoomEntity)
         private readonly roomRepository: Repository<RoomEntity>
@@ -20,18 +19,37 @@ export class RoomService {
     }
 
     async getRoom(roomId: number): Promise<RoomI> {
-        const foundRoom = this.roomRepository.findOne(roomId, {
-            relations: ['users']
-        });
+        const foundRoom = this.roomRepository.findOne(roomId);
         return foundRoom;
     }
 
     async getRoomsForUser(userId: number, options: IPaginationOptions): Promise<Pagination<RoomI>> {
         const query = this.roomRepository
             .createQueryBuilder('room')
-            .innerJoin('added_user_room_entity', 'addedUserRoom', 'addedUserRoom.roomId = room.id')
-            .innerJoinAndSelect('user_entity', 'user', 'addedUserRoom.userId = user.id')
+            .leftJoin('added_user_room_entity', 'addedUserRoom', 'addedUserRoom.roomId = room.id')
+            .leftJoin('user_entity', 'user', 'addedUserRoom.userId = user.id')
             .where('user.id = :userId', { userId })
+            .orderBy('room.updatedAt', 'DESC');
+
+        const result = paginate(query, options);
+        return result;
+    }
+
+    async getPublicRooms(options: IPaginationOptions): Promise<Pagination<RoomI>> {
+        const query = this.roomRepository
+            .createQueryBuilder('room')
+            .where('room.isPublic = true')
+            .orderBy('room.updatedAt', 'DESC');
+
+        const result = paginate(query, options);
+        return result;
+    }
+
+    async getFilteredPublicRooms(options: IPaginationOptions, searchValue: string): Promise<Pagination<RoomI>> {
+        const query = this.roomRepository
+            .createQueryBuilder('room')
+            .where('room.isPublic = true')
+            .andWhere("room.title like :title", { title:`%${searchValue}%` })
             .orderBy('room.updatedAt', 'DESC');
 
         const result = paginate(query, options);

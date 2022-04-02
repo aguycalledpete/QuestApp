@@ -25,10 +25,7 @@ export class ProcessLoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // send login request on web socket
-    this.socket.emit(this.constantsService.SOCKET_TO_LOGIN);
-
-    // wait for login confirmation on web socket
+    // set subscription for login confirmation on web socket
     const loginConfirmedSubscription =
       this.socket.fromEvent<any>(this.constantsService.SOCKET_FROM_LOGIN_CONFIRMED).pipe(
         timeout(10000),
@@ -41,6 +38,9 @@ export class ProcessLoginComponent implements OnInit, OnDestroy {
         this.router.navigate(['../public-rooms'], { relativeTo: this.activatedRoute });
       });
     this.subscription.add(loginConfirmedSubscription);
+
+    // send login request on web socket
+    this.socket.emit(this.constantsService.SOCKET_TO_LOGIN);
   }
 
   ngOnDestroy(): void {

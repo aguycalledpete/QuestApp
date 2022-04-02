@@ -16,10 +16,11 @@ export class AddedUserRoomService {
         private readonly addedUserRoomRepository: Repository<AddedUserRoomEntity>
     ) { }
 
-    async addUsersToRoom(users: UserI[], room: RoomI): Promise<AddedUserRoomI[]> {
+    async addUsersToRoom(users: UserI[], room: RoomI, creator: UserI): Promise<AddedUserRoomI[]> {
         let addedUsers = new Array<AddedUserRoomI>();
+        users.push(creator);
         for (const user of users) {
-            const userRole = user === room.creator ? UserRoleEnum.Administrator : UserRoleEnum.None;
+            const userRole = user === creator ? UserRoleEnum.Creator : UserRoleEnum.None;
             const userToAdd: AddedUserRoomI = {
                 user: user,
                 room: room,
@@ -34,6 +35,16 @@ export class AddedUserRoomService {
     async create(addedUserRoom: AddedUserRoomI): Promise<AddedUserRoomI> {
         const createdAddedUserRoom = await this.addedUserRoomRepository.save(addedUserRoom);
         return createdAddedUserRoom;
+    }
+
+    async findAddedUserByRoom(roomId: number): Promise<AddedUserRoomI[]> {
+        const found = this.addedUserRoomRepository.find({
+            where: {
+                room: { id: roomId }
+            },
+            relations: ['room', 'user']
+        });
+        return found;
     }
 
 }

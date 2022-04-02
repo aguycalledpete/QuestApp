@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RoomPaginateI } from 'src/app/models/interfaces';
@@ -23,27 +24,28 @@ export class MyRoomsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const getMyRoomsSubscription = this.roomService.getMyRooms().subscribe(paginatedRooms => {
-      this.paginatedRooms = paginatedRooms;
-    });
+    const getMyRoomsSubscription =
+      this.roomService.getMyRooms().subscribe(paginatedRooms => {
+        this.paginatedRooms = paginatedRooms;
+      });
     this.subscription.add(getMyRoomsSubscription);
 
-    this.roomService.emitPaginateRooms();
+    this.roomService.emitPaginateMyRooms();
   }
-  
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 
   ngAfterViewInit(): void {
-    this.roomService.emitPaginateRooms();
+    this.roomService.emitPaginateMyRooms();
   }
 
   goToCreateRooms(): void {
     this.router.navigate(['../create-room'], { relativeTo: this.activatedRoute });
   }
 
-  joinRoom(event: any): void {
-    this.router.navigate(['../room'], { relativeTo: this.activatedRoute });
+  onPaginateRooms(pageEvent: PageEvent) {
+    this.roomService.emitPaginateMyRooms(pageEvent.pageSize, pageEvent.pageIndex);
   }
 }

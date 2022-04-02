@@ -1,13 +1,16 @@
 import { AddedUserRoomI } from "./added-user-room.interface";
+import { ConnectedUserRoomI } from "./connected-user-room.interface";
+import { MessageI } from "./message.interface";
 import { MetaI } from "./meta.interface";
-import { UserI } from "./user.interface";
 
 export interface RoomI {
     id?: number;
     title?: string;
     description?: string;
-    creator?: UserI;
     users?: AddedUserRoomI[];
+    connectedUsers?: ConnectedUserRoomI[];
+    messages?: MessageI[];
+    isPublic?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
 }

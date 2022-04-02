@@ -1,3 +1,16 @@
+<div class="row pb-2">
+    <div id="CreateNewRoom" class="col-12 text-left">
+        <button mat-stroked-button type="button" (click)="goBackPage()">
+            <div class="row mx-0">
+                <div class="pr-1 pb-1">
+                    <app-icon icon="undo"></app-icon>
+                </div>
+                <div>Back</div>
+            </div>
+        </button>
+    </div>
+</div>
+
 <mat-card>
     <mat-card-content>
         <div class="row">
@@ -15,7 +28,19 @@
                     </mat-form-field>
 
                     <mat-form-field color="accent" class="col-12">
-                        <input matInput type="text" id="RoomDescription" placeholder="Description" formControlName="description">
+                        <input matInput type="text" id="RoomDescription" placeholder="Description"
+                            formControlName="description">
+                    </mat-form-field>
+
+                    <mat-form-field color="accent" class="col-12">
+                        <mat-label>Room Visibility</mat-label>
+                        <mat-select formControlName="isPublic" id="isPublic">
+                            <mat-option [value]="true">Public</mat-option>
+                            <mat-option [value]="false">Private</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="isPublic.touched && isPublic.hasError('required')">
+                            Room visibility must be selected
+                        </mat-error>
                     </mat-form-field>
 
                     <div class="col-12">

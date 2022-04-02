@@ -15,9 +15,6 @@ export class RoomEntity {
     @Column({ nullable: true })
     description: string;
 
-    @ManyToOne(() => UserEntity)
-    creator: UserEntity;
-
     @OneToMany(() => AddedUserRoomEntity, addedUser => addedUser.room)
     users: AddedUserRoomEntity[];
 

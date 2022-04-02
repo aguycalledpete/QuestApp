@@ -1,4 +1,4 @@
-<ng-container [ngSwitch]="(IsMobileSize$ | async)">
+<ng-container [ngSwitch]="isMobileSize">
     <ng-container *ngSwitchCase="true" [ngTemplateOutlet]="mobileContainer"></ng-container>
     <ng-container *ngSwitchCase="false" [ngTemplateOutlet]="desktopContainer"></ng-container>
     <ng-container *ngSwitchDefault [ngTemplateOutlet]="desktopContainer"></ng-container>

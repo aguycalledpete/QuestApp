@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit, } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { RoomPaginateI } from 'src/app/models/interfaces';
+import { debounceTime, distinctUntilChanged, iif, skipWhile, Subscription, switchMap, tap, throttleTime } from 'rxjs';
+import { RoomPaginateI, UserI } from 'src/app/models/interfaces';
 import { RoomService } from '../../services';
 
 @Component({
@@ -14,7 +15,7 @@ export class PublicRoomsComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
   paginatedRooms: RoomPaginateI;
-  searchRoom = new FormControl();
+  searchRoom = new FormControl(null);
 
   constructor(
     private roomService: RoomService,
@@ -25,24 +26,43 @@ export class PublicRoomsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const getMyRoomsSubscription = this.roomService.getMyRooms().subscribe(paginatedRooms => {
-      this.paginatedRooms = paginatedRooms;
-    });
-    this.subscription.add(getMyRoomsSubscription);
+    const getAllRoomsSubscription =
+      this.roomService.getAllRooms().pipe(
+        tap(filteredPaginatedRooms => {
+          if (this.searchRoom.value != null) {
+            this.paginatedRooms = filteredPaginatedRooms;
+          }
+        }),
+        skipWhile(() => this.searchRoom.value != null),
+        throttleTime(10000),
+      ).subscribe(paginatedRooms => {
+        this.paginatedRooms = paginatedRooms;
+      });
+    this.subscription.add(getAllRoomsSubscription);
 
-    this.roomService.emitPaginateRooms();
+    const searchRoomSubscription =
+      this.searchRoom.valueChanges.pipe(
+        debounceTime(500),
+        distinctUntilChanged()
+      ).subscribe((roomTitle: string) => {
+        this.roomService.filterAllRooms(roomTitle);
+      });
+    this.subscription.add(searchRoomSubscription);
+
+    this.roomService.emitPaginateAllRooms();
   }
-  
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 
-  ngAfterViewInit(): void {
-    this.roomService.emitPaginateRooms();
-  }
-
   goToCreateRooms(): void {
     this.router.navigate(['../create-room'], { relativeTo: this.activatedRoute });
+  }
+
+  onPaginateRooms(pageEvent: PageEvent) {
+    const searchValue = this.searchRoom.value as string;
+    this.roomService.emitPaginateAllRooms(pageEvent.pageSize, pageEvent.pageIndex, searchValue);
   }
 
   joinRoom(event: any): void {

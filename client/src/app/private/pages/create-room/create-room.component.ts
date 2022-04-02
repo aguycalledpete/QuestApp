@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,12 +14,14 @@ export class CreateRoomComponent {
 
   form: FormGroup = new FormGroup({
     title: new FormControl(null, [Validators.required]),
+    isPublic: new FormControl(null, [Validators.required]),
     description: new FormControl(null),
     users: new FormArray([]),
   });
 
   constructor(
     private roomService: RoomService,
+    private location: Location,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) { }
@@ -30,7 +33,13 @@ export class CreateRoomComponent {
 
     const formValue: RoomI = this.form.getRawValue();
     this.roomService.createRoom(formValue);
-    this.router.navigate(['../my-rooms'], { relativeTo: this.activatedRoute })
+
+    const isNewRoomPublic = this.isPublic.value as boolean;
+    if (isNewRoomPublic) {
+      this.router.navigate(['../public-rooms'], { relativeTo: this.activatedRoute })
+    } else {
+      this.router.navigate(['../my-rooms'], { relativeTo: this.activatedRoute })
+    }
   }
 
   addUser(user: UserI): void {
@@ -58,6 +67,14 @@ export class CreateRoomComponent {
 
   get users(): FormArray {
     return this.form.get('users') as FormArray;
+  }
+
+  get isPublic(): FormControl {
+    return this.form.get('isPublic') as FormControl;
+  }
+
+  goBackPage() {
+    this.location.back();
   }
 
 }

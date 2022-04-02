@@ -25,6 +25,10 @@ export class ConnectedUserService {
         return this.connectedUserRepository.save(connectedUser);
     }
 
+    async getAll(): Promise<ConnectedUserI[]> {
+        return this.connectedUserRepository.find({ order: { id: "DESC" }});
+    }
+
     async findByUser(user: UserI): Promise<ConnectedUserI[]> {
         return this.connectedUserRepository.find({ user });
     }

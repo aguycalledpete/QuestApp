@@ -24,11 +24,15 @@ export class ConstantsService {
   SOCKET_TO_CLOSE_ROOM: string = 'closeRoom';
   SOCKET_TO_JOIN_ROOM: string = 'joinRoom';
   SOCKET_TO_LEAVE_ROOM: string = 'leaveRoom';
-  SOCKET_TO_PAGINATE_ROOMS: string = 'paginateRooms';
   SOCKET_TO_CREATE_ROOM: string = 'createRoom';
-  SOCKET_FROM_ROOMS: string = 'rooms';
+  SOCKET_TO_FILTER_ALL_ROOMS: string = 'filterAllRooms';
+  SOCKET_TO_PAGINATE_MY_ROOMS: string = 'paginateMyRooms';
+  SOCKET_TO_PAGINATE_ALL_ROOMS: string = 'paginateAllRooms';
+  SOCKET_FROM_MY_ROOMS: string = 'rooms';
+  SOCKET_FROM_ALL_ROOMS: string = 'allRooms';
   SOCKET_FROM_MESSAGES: string = 'messages';
   SOCKET_FROM_MESSAGE_ADDED: string = 'messageAdded';
+  SOCKET_FROM_USER_DISCONNECTED: string = 'userDisconnected';
 
   // local storage
   STORAGE_TOKEN: string = 'quest_app_token';

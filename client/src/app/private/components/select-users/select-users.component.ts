@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subscription, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subscription, tap } from 'rxjs';
 import { UserI } from 'src/app/models/interfaces';
 import { DeviceDetectorService, UserService } from 'src/app/public/services';
 
@@ -18,7 +18,7 @@ export class SelectUsersComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
   isMobileSize: boolean;
-  searchUsername = new FormControl();
+  searchUsername = new FormControl(null);
   filteredUsers: UserI[] = [];
   selectedUser: UserI = null;
   loggedInUser: UserI = this.userService.loggedInUser;
@@ -42,12 +42,15 @@ export class SelectUsersComponent implements OnInit, OnDestroy {
     this.searchUsername.valueChanges.pipe(
       debounceTime(500),
       distinctUntilChanged(),
-      switchMap(async (username: string) => {
-        const users = await this.userService.findByUsername(username);
-        this.filteredUsers = users.filter((user: UserI) => user.id !== this.loggedInUser.id);
+      tap(async (username: string) => {
+        let foundUsers = await this.userService.findByUsername(username);
+        foundUsers = foundUsers.filter((user: UserI) => user.id !== this.loggedInUser.id);
+        this.users.forEach(selectedUser => {
+          foundUsers = foundUsers.filter((user: UserI) => user.id !== selectedUser.id);
+        });
+        this.filteredUsers = foundUsers;
       })
-    )
-      .subscribe();
+    ).subscribe();
   }
 
   emitAddUser(): void {

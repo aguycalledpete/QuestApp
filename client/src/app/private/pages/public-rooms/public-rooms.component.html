@@ -26,14 +26,16 @@
     <div id="PublicRooms" class="flex-grow-1 pt-3">
         <mat-card>
             <mat-card-content>
-                <ng-container *ngIf="paginatedRooms?.items.length > 0 else noRooms">
-                    <div class="row">
-                        <div *ngFor="let room of paginatedRooms?.items" class="col-12 py-2">
-                            <app-room-list-item [room]="room" buttonText="Join" (onButtonClick)="joinRoom($event)">
-                            </app-room-list-item>
-                        </div>
+                <div class="row" *ngIf="paginatedRooms?.items?.length > 0; else noRooms">
+                    <div *ngFor="let room of paginatedRooms?.items" class="col-12 py-2">
+                        <app-room-list-item [room]="room" buttonText="Join" icon="group_add"
+                            (onButtonClick)="joinRoom($event)">
+                        </app-room-list-item>
                     </div>
-                </ng-container>
+                    <mat-paginator [length]="paginatedRooms?.meta?.totalItems"
+                        [pageIndex]="paginatedRooms?.meta?.currentPage" [pageSize]="paginatedRooms?.meta?.itemsPerPage"
+                        (page)="onPaginateRooms($event)" [pageSizeOptions]="[10,25,50]"></mat-paginator>
+                </div>
             </mat-card-content>
         </mat-card>
     </div>

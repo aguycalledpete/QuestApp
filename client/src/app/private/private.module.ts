@@ -13,6 +13,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 
 import { PrivateRoutingModule } from './private-routing.module';
 import {
@@ -60,7 +61,7 @@ import { SharedComponentsModule } from '../components/components.module';
     MatAutocompleteModule,
     MatIconModule,
     MatTooltipModule,
-    MatIconModule
+    MatSelectModule
   ]
 })
 export class PrivateModule { }

@@ -46,16 +46,25 @@ export class RoomService {
   }
 
   getMyRooms(): Observable<RoomPaginateI> {
-    return this.socket.fromEvent<RoomPaginateI>(this.constantsService.SOCKET_FROM_ROOMS);
+    return this.socket.fromEvent<RoomPaginateI>(this.constantsService.SOCKET_FROM_MY_ROOMS);
   }
 
   getAllRooms(): Observable<RoomPaginateI> {
-    return this.socket.fromEvent<RoomPaginateI>(this.constantsService.SOCKET_FROM_ROOMS);
+    return this.socket.fromEvent<RoomPaginateI>(this.constantsService.SOCKET_FROM_ALL_ROOMS);
   }
 
-  emitPaginateRooms(limit: number = 10, page: number = 0): void {
+  filterAllRooms(searchValue: string): void {
+    this.socket.emit(this.constantsService.SOCKET_TO_FILTER_ALL_ROOMS, searchValue);
+  }
+
+  emitPaginateMyRooms(limit: number = 10, page: number = 0): void {
     const paginationOptions = { limit, page };
-    this.socket.emit(this.constantsService.SOCKET_TO_PAGINATE_ROOMS, paginationOptions);
+    this.socket.emit(this.constantsService.SOCKET_TO_PAGINATE_MY_ROOMS, paginationOptions);
+  }
+
+  emitPaginateAllRooms(limit: number = 10, page: number = 0, searchValue: string = null): void {
+    const paginationOptions = { limit, page };
+    this.socket.emit(this.constantsService.SOCKET_TO_PAGINATE_ALL_ROOMS, paginationOptions, searchValue);
   }
 
   createRoom(room: RoomI): void {
