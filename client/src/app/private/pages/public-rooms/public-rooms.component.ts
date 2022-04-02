@@ -13,9 +13,10 @@ import { RoomService } from '../../services';
 })
 export class PublicRoomsComponent implements OnInit, OnDestroy {
 
-  subscription: Subscription;
+  private subscription: Subscription;
   paginatedRooms: RoomPaginateI;
   searchRoom = new FormControl(null);
+  private waitingForPagination: boolean;
 
   constructor(
     private roomService: RoomService,
@@ -28,9 +29,13 @@ export class PublicRoomsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const getAllRoomsSubscription =
       this.roomService.getAllRooms().pipe(
-        tap(filteredPaginatedRooms => {
+        tap(paginatedRooms => {
           if (this.searchRoom.value != null) {
-            this.paginatedRooms = filteredPaginatedRooms;
+            this.paginatedRooms = paginatedRooms;
+          }
+          if (this.isPaginationResponse(paginatedRooms)) {
+            this.waitingForPagination = false;
+            this.paginatedRooms = paginatedRooms;
           }
         }),
         skipWhile(() => this.searchRoom.value != null),
@@ -61,12 +66,24 @@ export class PublicRoomsComponent implements OnInit, OnDestroy {
   }
 
   onPaginateRooms(pageEvent: PageEvent) {
+    this.waitingForPagination = true;
     const searchValue = this.searchRoom.value as string;
     this.roomService.emitPaginateAllRooms(pageEvent.pageSize, pageEvent.pageIndex, searchValue);
   }
 
   joinRoom(event: any): void {
     this.router.navigate(['../room'], { relativeTo: this.activatedRoute });
+  }
+
+  private isPaginationResponse(paginatedRooms: RoomPaginateI) {
+    if (!this.waitingForPagination) {
+      return false;
+    }
+    if (this.paginatedRooms.meta.currentPage == paginatedRooms.meta.currentPage &&
+      this.paginatedRooms.meta.itemsPerPage == paginatedRooms.meta.itemsPerPage) {
+      return false;
+    }
+    return true;
   }
 
 }

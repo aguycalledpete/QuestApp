@@ -16,7 +16,7 @@ export class SelectUsersComponent implements OnInit, OnDestroy {
   @Output() addUser = new EventEmitter<UserI>();
   @Output() removeUser = new EventEmitter<UserI>();
 
-  subscription: Subscription;
+  private subscription: Subscription;
   isMobileSize: boolean;
   searchUsername = new FormControl(null);
   filteredUsers: UserI[] = [];

@@ -12,7 +12,7 @@ import { CustomSocket } from '../../sockets/custom-socket';
 })
 export class ProcessLoginComponent implements OnInit, OnDestroy {
 
-  subscription: Subscription;
+  private subscription: Subscription;
 
   constructor(
     private socket: CustomSocket,

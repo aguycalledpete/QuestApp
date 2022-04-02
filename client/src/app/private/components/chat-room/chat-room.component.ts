@@ -15,7 +15,7 @@ export class ChatRoomComponent implements OnInit, OnChanges, OnDestroy, AfterVie
 
   @ViewChild('messages') private messagesScroller: ElementRef;
 
-  subscription: Subscription;
+  private subscription: Subscription;
   paginatedMessages: MessagePaginateI;
   chatMessage: FormControl = new FormControl(null, [Validators.required]);
 

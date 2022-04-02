@@ -13,7 +13,7 @@ import { CustomSocket } from '../../sockets/custom-socket';
 export class PrivatePagesContainerComponent implements OnInit, OnDestroy {
 
   isMobileSize: boolean;
-  subscription: Subscription;
+  private subscription: Subscription;
 
   constructor(
     private socket: CustomSocket,

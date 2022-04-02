@@ -34,12 +34,7 @@ export class CreateRoomComponent {
     const formValue: RoomI = this.form.getRawValue();
     this.roomService.createRoom(formValue);
 
-    const isNewRoomPublic = this.isPublic.value as boolean;
-    if (isNewRoomPublic) {
-      this.router.navigate(['../public-rooms'], { relativeTo: this.activatedRoute })
-    } else {
-      this.router.navigate(['../my-rooms'], { relativeTo: this.activatedRoute })
-    }
+    this.router.navigate(['../my-rooms'], { relativeTo: this.activatedRoute })
   }
 
   addUser(user: UserI): void {

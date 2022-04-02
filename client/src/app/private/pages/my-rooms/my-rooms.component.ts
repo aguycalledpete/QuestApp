@@ -12,7 +12,7 @@ import { RoomService } from '../../services';
 })
 export class MyRoomsComponent implements OnInit {
 
-  subscription: Subscription;
+  private subscription: Subscription;
   paginatedRooms: RoomPaginateI;
 
   constructor(
