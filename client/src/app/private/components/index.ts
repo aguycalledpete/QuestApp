@@ -1,5 +1,4 @@
 export { ChatMessageComponent } from './chat-message/chat-message.component';
-export { ChatRoomComponent } from './chat-room/chat-room.component';
 export { SelectUsersComponent } from './select-users/select-users.component';
 export { PageFooterComponent } from './page-footer/page-footer.component';
 export { PageHeaderComponent } from './page-header/page-header.component';

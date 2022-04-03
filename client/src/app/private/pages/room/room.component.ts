@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription, combineLatest, startWith, map } from 'rxjs';
+import { Subscription, combineLatest, startWith, map, delay } from 'rxjs';
 import { MessageTypeEnum } from 'src/app/models/enums/message-type.enum';
-import { MessageI, MessagePaginateI, RoomI } from 'src/app/models/interfaces';
-import { ConstantsService, LocalStorageService, SnackBarService } from 'src/app/services';
+import { MessageI, RoomI } from 'src/app/models/interfaces';
+import { ConstantsService, SnackBarService } from 'src/app/services';
 import { RoomService } from '../../services';
 import { CustomSocket } from '../../sockets/custom-socket';
 
@@ -19,13 +19,13 @@ export class RoomComponent implements OnInit {
 
   private subscription: Subscription;
   room: RoomI;
-  paginatedMessages: MessagePaginateI;
+  messages: MessageI[];
   chatMessage: FormControl = new FormControl(null);
+  hasLoaded: boolean;
 
   constructor(
     private socket: CustomSocket,
     private constantsService: ConstantsService,
-    private localStorageService: LocalStorageService,
     private roomService: RoomService,
     private snackBarService: SnackBarService,
     private route: ActivatedRoute
@@ -35,18 +35,22 @@ export class RoomComponent implements OnInit {
 
   ngOnInit(): void {
     const queryParamsSubscription =
-      this.route.queryParams.subscribe(params => {
-        const roomId = params['id'];
-        if (!roomId) {
-          return;
-        }
-        this.socket.emit(this.constantsService.SOCKET_TO_OPEN_ROOM, roomId);
-      });
+      this.route.queryParams.pipe(
+        delay(500)
+      )
+        .subscribe(params => {
+          const roomId = params['id'];
+          if (!roomId) {
+            return;
+          }
+          this.socket.emit(this.constantsService.SOCKET_TO_OPEN_ROOM, roomId);
+        });
     this.subscription.add(queryParamsSubscription);
 
     const roomOpenedSubscription =
       this.socket.fromEvent<RoomI>(this.constantsService.SOCKET_FROM_ROOM_OPENED)
         .subscribe(roomOpened => {
+          this.hasLoaded = true;
           this.room = roomOpened;
         });
     this.subscription.add(roomOpenedSubscription);
@@ -54,6 +58,7 @@ export class RoomComponent implements OnInit {
     const roomOpenErrorSubscription =
       this.socket.fromEvent<string>(this.constantsService.SOCKET_FROM_OPEN_ROOM_ERROR)
         .subscribe(roomOpenError => {
+          this.hasLoaded = true;
           this.snackBarService.displayMatSnackBar(roomOpenError, 5000);
         });
     this.subscription.add(roomOpenErrorSubscription);
@@ -65,18 +70,17 @@ export class RoomComponent implements OnInit {
           startWith(null)
         )
       ]).pipe(
-        map(([messagePaginate, message]) => {
+        map(([messages, message]) => {
           // add new message to display when message exists and room matches the open room
-          if (message && message.room.id === this.room.id && !messagePaginate.items.some(m => m.id === message.id)) {
-            messagePaginate.items.push(message);
+          if (message && message.room.id === this.room.id && !messages.some(m => m.id === message.id)) {
+            messages.push(message);
           }
           // sorts messages to display latest messages at the bottom
-          const items = messagePaginate.items.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-          messagePaginate.items = items;
-          return messagePaginate;
+          messages = messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+          return messages;
         })
-      ).subscribe((returnedPaginatedMessages) => {
-        this.paginatedMessages = returnedPaginatedMessages;
+      ).subscribe((messages) => {
+        this.messages = messages;
         this.scrollToBottom()
       });
     this.subscription.add(messagesSubscription);

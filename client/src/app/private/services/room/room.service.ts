@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { catchError, lastValueFrom, Observable, of, timeout } from 'rxjs';
 import { MessageI, RoomI, MessagePaginateI, RoomPaginateI } from 'src/app/models/interfaces';
 import { SnackBarService, ConstantsService } from 'src/app/services';
 import { CustomSocket } from '../../sockets/custom-socket';
@@ -38,7 +38,7 @@ export class RoomService {
     this.router.navigate(['private/public-rooms']);
   }
 
-  joinRoom(room: RoomI): void {
+  async joinRoom(room: RoomI): Promise<void> {
     this.socket.emit(this.constantsService.SOCKET_TO_JOIN_ROOM, room.id);
     this.router.navigate(['private/room'], { queryParams: { id: room.id } });
   }
@@ -48,8 +48,8 @@ export class RoomService {
     this.router.navigate(['private/public-rooms']);
   }
 
-  getMessages(): Observable<MessagePaginateI> {
-    return this.socket.fromEvent<MessagePaginateI>(this.constantsService.SOCKET_FROM_MESSAGES);
+  getMessages(): Observable<MessageI[]> {
+    return this.socket.fromEvent<MessageI[]>(this.constantsService.SOCKET_FROM_MESSAGES);
   }
 
   getMyRooms(): Observable<RoomPaginateI> {

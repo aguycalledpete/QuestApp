@@ -5,19 +5,14 @@
             <h2>{{room.title}}</h2>
         </div>
         <div *ngIf="room.description" class="w-100">
-            <h3 class="description">{{room.description}}</h3>
-        </div>
-        <div class="w-100">
-            <span *ngFor="let addedUser of room.users; let last = last;">
-                {{addedUser.user.username}}{{last? '':', '}}
-            </span>
+            <small class="description">{{room.description}}</small>
         </div>
     </div>
 
     <mat-card class="pb-1 max-h-100 min-h-300px">
         <mat-card-content class="d-flex flex-column h-100">
             <div #MessagesScroller class="d-flex flex-column overflow-y-scroll min-h-200px">
-                <app-chat-message *ngFor="let message of paginatedMessages?.items" [message]="message">
+                <app-chat-message *ngFor="let message of messages" [message]="message">
                 </app-chat-message>
             </div>
 
@@ -47,7 +42,16 @@
 </div>
 
 <ng-template #noroomSelected>
-    <div class="text-center">
-        <mat-error>No room Selected</mat-error>
+    <div class="text-center d-flex flex-column align-items-center">
+        <ng-container *ngIf="!hasLoaded">
+            <h5>Loading room...</h5>
+            <mat-progress-spinner mode="indeterminate">
+            </mat-progress-spinner>
+        </ng-container>
+        <ng-container *ngIf="hasLoaded">
+            <mat-error>
+                Failed to load room!
+            </mat-error>
+        </ng-container>
     </div>
 </ng-template>

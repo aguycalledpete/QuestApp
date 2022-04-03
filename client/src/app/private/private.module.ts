@@ -14,10 +14,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 
 import { PrivateRoutingModule } from './private-routing.module';
 import {
-  SelectUsersComponent, ChatRoomComponent, ChatMessageComponent,
+  SelectUsersComponent, ChatMessageComponent,
   PageFooterComponent, PageHeaderComponent, RoomListItemComponent
 } from './components';
 import {
@@ -32,7 +33,6 @@ import { SharedComponentsModule } from '../components/components.module';
   declarations: [
     CreateRoomComponent,
     SelectUsersComponent,
-    ChatRoomComponent,
     ChatMessageComponent,
     PublicRoomsComponent,
     MyRoomsComponent,
@@ -61,7 +61,8 @@ import { SharedComponentsModule } from '../components/components.module';
     MatAutocompleteModule,
     MatIconModule,
     MatTooltipModule,
-    MatSelectModule
+    MatSelectModule,
+    MatProgressSpinnerModule
   ]
 })
 export class PrivateModule { }

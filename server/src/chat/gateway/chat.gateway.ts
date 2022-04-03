@@ -179,10 +179,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     await this.connectedUserRoomService.create(connectedUserRoom)
 
     // send most recent messages to user
-    const paginatedMessages = await this.messageService.findMessagesForRoom(room.id, this.defaultPagination);
-    // subtract page -1 to match angular material paginator
-    paginatedMessages.meta.currentPage--;
-    await this.server.to(socket.id).emit('messages', paginatedMessages);
+    const messages = await this.messageService.findMessagesForRoom(room.id);
+    await this.server.to(socket.id).emit('messages', messages);
   }
 
   @SubscribeMessage('joinRoom')

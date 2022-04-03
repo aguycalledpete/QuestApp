@@ -26,12 +26,12 @@ export class RoomListItemComponent implements OnInit {
     this.setIsUserAddedToRoom();
   }
 
-  buttonClicked(): void {
+  async buttonClicked(): Promise<void> {
     if (this.isUserAddedToRoom) {
       this.roomService.openRoom(this.room);
       return;
     }
-    this.roomService.joinRoom(this.room);
+    await this.roomService.joinRoom(this.room);
   }
 
   setCreator(): void {

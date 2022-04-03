@@ -1,19 +1,21 @@
-<div class="d-flex flex-column">
-    <div class="row flex-shrink-1">
-        <div class="col-6 align-self-end">
-            <h5 class="m-0">Game Rooms</h5>
-        </div>
-        <div id="CreateNewRoom" class="col-6 text-right">
-            <button mat-stroked-button type="button" (click)="goToCreateRooms()">
-                <div class="row mx-0">
-                    <div>Create Room</div>
-                    <div class="pb-1">
-                        <app-icon icon="add"></app-icon>
+<div class="d-flex flex-column pb-2">
+    <div class="d-flex flex-column flex-shrink-1">
+        <div class="d-flex">
+            <div class="d-flex flex-grow-1 align-self-end">
+                <h5 class="m-0">Game Rooms</h5>
+            </div>
+            <div id="CreateNewRoom" class="d-flex text-right">
+                <button mat-stroked-button type="button" (click)="goToCreateRooms()">
+                    <div class="d-flex">
+                        <div>New Room</div>
+                        <div class="pb-1">
+                            <app-icon icon="add"></app-icon>
+                        </div>
                     </div>
-                </div>
-            </button>
+                </button>
+            </div>
         </div>
-        <div class="col-12 d-flex align-items-center">
+        <div class="d-flex align-items-center">
             <div class="pr-2 pb-2">Filter:</div>
             <mat-form-field color="accent">
                 <input matInput type="text" placeholder="Search for Room" [matAutocomplete]="auto"
@@ -32,10 +34,10 @@
                             (onButtonClick)="joinRoom($event)">
                         </app-room-list-item>
                     </div>
-                    <mat-paginator [length]="paginatedRooms?.meta?.totalItems"
-                        [pageIndex]="paginatedRooms?.meta?.currentPage" [pageSize]="paginatedRooms?.meta?.itemsPerPage"
-                        (page)="onPaginateRooms($event)" [pageSizeOptions]="[10,25,50]"></mat-paginator>
                 </div>
+                <mat-paginator [length]="paginatedRooms?.meta?.totalItems"
+                    [pageIndex]="paginatedRooms?.meta?.currentPage" [pageSize]="paginatedRooms?.meta?.itemsPerPage"
+                    (page)="onPaginateRooms($event)" [pageSizeOptions]="[5,10,25,50]"></mat-paginator>
             </mat-card-content>
         </mat-card>
     </div>

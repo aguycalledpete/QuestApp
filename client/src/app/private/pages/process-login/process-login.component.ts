@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { timeout, catchError, of, Subscription } from 'rxjs';
+import { timeout, catchError, of, Subscription, delay } from 'rxjs';
 import { ConstantsService } from 'src/app/services';
 import { ProfileService } from '../../services';
 import { CustomSocket } from '../../sockets/custom-socket';
@@ -29,6 +29,7 @@ export class ProcessLoginComponent implements OnInit, OnDestroy {
     const loginConfirmedSubscription =
       this.socket.fromEvent<boolean>(this.constantsService.SOCKET_FROM_LOGIN_CONFIRMED).pipe(
         timeout(10000),
+        delay(500),
         catchError(() => of(false))
       ).subscribe(isLoginConfirmed => {
         if (!isLoginConfirmed) {
