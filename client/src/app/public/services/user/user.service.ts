@@ -38,7 +38,6 @@ export class UserService {
     const loggedInUser = await this.findByEmail(userToLogin.email);
     this.loggedInUser = loggedInUser;
 
-
     this.localStorageService.store(this.constantsService.STORAGE_TOKEN, loginResponse.accessToken);
     this.localStorageService.store(this.constantsService.STORAGE_USER, loggedInUser, true);
 

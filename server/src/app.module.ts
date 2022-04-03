@@ -38,6 +38,7 @@ export class AppModule implements NestModule {
         { path: '/server/user', method: RequestMethod.POST },
         { path: '/server/user/login', method: RequestMethod.POST },
         { path: '/server/user/find-one-by-email', method: RequestMethod.GET },
+        { path: '/server/user/find-forgot-user-by-email', method: RequestMethod.GET },
         { path: '/server/user/answer-question', method: RequestMethod.POST },
         { path: '/server/user/reset-password', method: RequestMethod.POST }
       )

@@ -48,7 +48,7 @@ export class FindAccountComponent implements OnInit {
     }
 
     const email = this.email.value;
-    const user = await this.userService.findByEmail(email);
+    const user = await this.userService.findForgotUserByEmail(email);
     this.foundUser = user;
   }
 
