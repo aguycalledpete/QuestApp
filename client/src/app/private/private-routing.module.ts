@@ -2,8 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {
   PrivatePagesContainerComponent, PublicRoomsComponent,
-  MyRoomsComponent, FriendsComponent, ProfileComponent,
-  CreateRoomComponent,
+  MyRoomsComponent, ProfileComponent, CreateRoomComponent,
   ProcessLoginComponent
 } from './pages';
 import { RoomComponent } from './pages/room/room.component';
@@ -40,16 +39,7 @@ const routes: Routes = [
       },
       {
         path: 'profile',
-        children: [
-          {
-            path: '',
-            component: ProfileComponent
-          },
-          {
-            path: 'friends',
-            component: FriendsComponent
-          },
-        ]
+        component: ProfileComponent
       }
     ]
   },

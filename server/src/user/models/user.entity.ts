@@ -1,9 +1,11 @@
 import { ConnectedUserEntity } from "src/chat/models/connected-user/connected-user.entity";
 import { ConnectedUserRoomEntity } from "src/chat/models/connected-user-room/connected-user-room.entity";
 import { MessageEntity } from "src/chat/models/message/message.entity";
-import { RoomEntity } from "src/chat/models/room/room.entity";
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { FriendRequestEntity } from "./friend-request/friend-request.entity";
+import {
+    BeforeInsert, BeforeUpdate, Column,
+    CreateDateColumn, Entity, OneToMany,
+    PrimaryGeneratedColumn, UpdateDateColumn
+} from "typeorm";
 import { AddedUserRoomEntity } from "src/chat/models/added-user-room/added-user-room.entity";
 
 @Entity()
@@ -37,20 +39,6 @@ export class UserEntity {
 
     @OneToMany(() => MessageEntity, message => message.user)
     messages: MessageEntity[];
-
-    @ManyToMany(() => UserEntity)
-    @JoinTable()
-    friends: UserEntity[];
-
-    @ManyToMany(() => UserEntity)
-    @JoinTable()
-    blockedUsers: UserEntity[];
-
-    @OneToMany(() => FriendRequestEntity, friendRequest => friendRequest.requester)
-    sentFriendRequests: FriendRequestEntity[];
-
-    @OneToMany(() => FriendRequestEntity, friendRequest => friendRequest.addressee)
-    receivedFriendRequests: FriendRequestEntity[];
 
     @CreateDateColumn()
     createdAt: Date;

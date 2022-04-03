@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, lastValueFrom, Observable, of, timeout } from 'rxjs';
-import { MessageI, RoomI, MessagePaginateI, RoomPaginateI } from 'src/app/models/interfaces';
+import { Observable } from 'rxjs';
+import { MessageI, RoomI, RoomPaginateI } from 'src/app/models/interfaces';
 import { SnackBarService, ConstantsService } from 'src/app/services';
 import { CustomSocket } from '../../sockets/custom-socket';
 
@@ -17,9 +17,7 @@ export class RoomService {
     private snackBarService: SnackBarService,
     private constantsService: ConstantsService,
     private router: Router
-  ) {
-
-  }
+  ) { }
 
   getAddedMessage(): Observable<MessageI> {
     return this.socket.fromEvent<MessageI>(this.constantsService.SOCKET_FROM_MESSAGE_ADDED);

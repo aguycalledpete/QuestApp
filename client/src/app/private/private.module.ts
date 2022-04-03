@@ -22,8 +22,7 @@ import {
   PageFooterComponent, PageHeaderComponent, RoomListItemComponent
 } from './components';
 import {
-  CreateRoomComponent, FriendsComponent,
-  MyRoomsComponent, PrivatePagesContainerComponent,
+  CreateRoomComponent, MyRoomsComponent, PrivatePagesContainerComponent,
   ProcessLoginComponent, ProfileComponent, PublicRoomsComponent,
   RoomComponent
 } from './pages';
@@ -36,7 +35,6 @@ import { SharedComponentsModule } from '../components/components.module';
     ChatMessageComponent,
     PublicRoomsComponent,
     MyRoomsComponent,
-    FriendsComponent,
     ProfileComponent,
     PageFooterComponent,
     PageHeaderComponent,

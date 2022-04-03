@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit, } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
-import { debounceTime, delay, distinctUntilChanged, iif, lastValueFrom, of, skipWhile, Subscription, switchMap, tap, throttleTime } from 'rxjs';
-import { RoomPaginateI, UserI } from 'src/app/models/interfaces';
+import { debounceTime, delay, distinctUntilChanged, lastValueFrom, of, skipWhile, Subscription, tap, throttleTime } from 'rxjs';
+import { RoomPaginateI } from 'src/app/models/interfaces';
 import { RoomService } from '../../services';
 
 @Component({

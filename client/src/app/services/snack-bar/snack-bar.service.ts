@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { lastValueFrom } from 'rxjs';
 import { DeviceDetectorService } from '../device-detector/device-detector.service';
 
 @Injectable({
