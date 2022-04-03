@@ -30,9 +30,7 @@
             <mat-card-content>
                 <div class="row" *ngIf="paginatedRooms?.items?.length > 0; else noRooms">
                     <div *ngFor="let room of paginatedRooms?.items" class="col-12 py-2">
-                        <app-room-list-item [room]="room" buttonText="Join" icon="group_add"
-                            (onButtonClick)="joinRoom($event)">
-                        </app-room-list-item>
+                        <app-room-list-item [room]="room"></app-room-list-item>
                     </div>
                 </div>
                 <mat-paginator [length]="paginatedRooms?.meta?.totalItems"

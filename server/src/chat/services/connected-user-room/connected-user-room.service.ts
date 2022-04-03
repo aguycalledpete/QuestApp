@@ -31,8 +31,8 @@ export class ConnectedUserRoomService {
     }
 
     async deleteAll() {
-        await this.ConnectedRoomRepository.
-            createQueryBuilder()
+        await this.ConnectedRoomRepository
+            .createQueryBuilder()
             .delete()
             .execute();
     }

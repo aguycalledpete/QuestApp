@@ -3,6 +3,16 @@
     <div class="flex-shrink-1 d-flex flex-column">
         <div class="d-flex align-items-center">
             <h2>{{room.title}}</h2>
+            <div class="ml-auto my-auto">
+                <button mat-stroked-button color="warn" (click)="leaveRoom()" (keyup.enter)="leaveRoom()">
+                    <div class="d-flex">
+                        <div class="d-sm-block d-none">Leave room</div>
+                        <div class="pl-sm-1 pb-sm-1 pt-sm-0 py-1 m-sm-0 m-auto">
+                            <app-icon icon="no_meeting_room"></app-icon>
+                        </div>
+                    </div>
+                </button>
+            </div>
         </div>
         <div *ngIf="room.description" class="w-100">
             <small class="description">{{room.description}}</small>
@@ -24,8 +34,8 @@
                             (keyup.enter)="sendMessage()">
                     </mat-form-field>
                     <div class="flex-shrink-1 px-1">
-                        <button mat-button [disabled]="!chatMessage.value" (click)="sendMessage()"
-                            (keyup.enter)="sendMessage()">
+                        <button mat-stroked-button color="primary" [disabled]="!chatMessage.value"
+                            (click)="sendMessage()" (keyup.enter)="sendMessage()">
                             <div class="d-flex">
                                 <div class="d-sm-block d-none">Send</div>
                                 <div class="pl-sm-1 pb-sm-1 m-sm-0 m-auto">

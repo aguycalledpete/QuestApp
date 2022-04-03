@@ -38,7 +38,12 @@ export class RoomListItemComponent implements OnInit {
     if (!this.room || !this.room.users || this.room.users.length == 0) {
       return;
     }
+
     const creator = this.room.users.find(user => user.role === UserRoleEnum.Creator);
+    if (!creator) {
+      return;
+    }
+
     this.creator = creator.user;
   }
 

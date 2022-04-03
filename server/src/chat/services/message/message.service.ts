@@ -25,14 +25,6 @@ export class MessageService {
             relations: ['room', 'user']
         });
         return foundMessages;
-
-        // const query = this.messageRepository
-        //     .createQueryBuilder('message')
-        //     .leftJoin('message.room', 'room')
-        //     .where('room.id = :roomId', { roomId })
-        //     .leftJoinAndSelect('message.user', 'user')
-        //     .orderBy('message.createdAt', 'DESC');
-        // return query.execute();
     }
 
 }

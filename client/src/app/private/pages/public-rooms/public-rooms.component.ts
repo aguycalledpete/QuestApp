@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
-import { debounceTime, distinctUntilChanged, iif, skipWhile, Subscription, switchMap, tap, throttleTime } from 'rxjs';
+import { debounceTime, delay, distinctUntilChanged, iif, lastValueFrom, of, skipWhile, Subscription, switchMap, tap, throttleTime } from 'rxjs';
 import { RoomPaginateI, UserI } from 'src/app/models/interfaces';
 import { RoomService } from '../../services';
 
@@ -26,7 +26,7 @@ export class PublicRoomsComponent implements OnInit, OnDestroy {
     this.subscription = new Subscription();
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const getPublicRoomsSubscription =
       this.roomService.getPublicRooms().pipe(
         tap(paginatedRooms => {
@@ -54,7 +54,13 @@ export class PublicRoomsComponent implements OnInit, OnDestroy {
       });
     this.subscription.add(searchRoomSubscription);
 
-    this.roomService.emitPaginatePublicRooms();
+
+    await lastValueFrom(
+      of(delay(1000)).pipe(
+        tap(() => {
+          this.roomService.emitPaginatePublicRooms();
+        })
+      ));
   }
 
   ngOnDestroy(): void {
@@ -69,10 +75,6 @@ export class PublicRoomsComponent implements OnInit, OnDestroy {
     this.waitingForPagination = true;
     const searchValue = this.searchRoom.value as string;
     this.roomService.emitPaginatePublicRooms(pageEvent.pageSize, pageEvent.pageIndex, searchValue);
-  }
-
-  joinRoom(event: any): void {
-    this.router.navigate(['../room'], { relativeTo: this.activatedRoute });
   }
 
   private isPaginationResponse(paginatedRooms: RoomPaginateI) {

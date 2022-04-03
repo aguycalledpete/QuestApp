@@ -44,7 +44,7 @@ export class RoomService {
   }
 
   leaveRoom(room: RoomI): void {
-    this.socket.emit(this.constantsService.SOCKET_TO_LEAVE_ROOM, room);
+    this.socket.emit(this.constantsService.SOCKET_TO_LEAVE_ROOM, room.id);
     this.router.navigate(['private/public-rooms']);
   }
 

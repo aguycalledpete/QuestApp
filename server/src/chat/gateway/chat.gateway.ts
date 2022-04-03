@@ -219,6 +219,36 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     await this.connectedUserRoomService.deleteBySocketId(socket.id);
   }
 
+  @SubscribeMessage('leaveRoom')
+  async onLeaveRoom(socket: Socket, roomId: number): Promise<void> {
+    if (!this.userExists(socket)) {
+      return;
+    }
+
+    const room = await this.roomService.getRoomById(roomId);
+
+    // remove connection from connected user rooms
+    await this.connectedUserRoomService.deleteBySocketId(socket.id);
+
+    // remove added user from room
+    const user: UserI = socket.data.user;
+    const result = await this.addedUserRoomService.deleteByRoomAndUser(room.id, user.id);
+
+    // save notification message to room
+    const message: MessageI = {
+      text: `${user.username} has left!`,
+      messageType: MessageTypeEnum.Notification,
+      user, room
+    };
+    const createdMessage = await this.messageService.create(message);
+    
+    // send message to connected users in the room
+    const connectedUserRooms = await this.connectedUserRoomService.findByRoom(room);
+    for (const user of connectedUserRooms) {
+      await this.server.to(user.socketId).emit('messageAdded', createdMessage);
+    }
+  }
+
   @SubscribeMessage('addMessage')
   async onAddMessage(socket: Socket, message: MessageI): Promise<void> {
     if (!this.userExists(socket)) {

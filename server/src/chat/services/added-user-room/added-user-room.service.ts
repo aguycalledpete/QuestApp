@@ -58,4 +58,33 @@ export class AddedUserRoomService {
         return addedUserRooms != null && addedUserRooms.length > 0;
     }
 
+    async deleteByUserId(userId: number) {
+        return this.addedUserRoomRepository
+            .createQueryBuilder('addedUserRoom')
+            .leftJoin('user_entity', 'user', 'addedUserRoom.userId = user.id')
+            .delete()
+            .where("user.id = :id", { id: userId })
+            .execute();
+    }
+
+    async deleteByRoomId(roomId: number) {
+        return this.addedUserRoomRepository
+            .createQueryBuilder('addedUserRoom')
+            .leftJoin('room_entity', 'room', 'addedUserRoom.userId = room.id')
+            .delete()
+            .where("room.id = :id", { id: roomId })
+            .execute();
+    }
+
+    async deleteByRoomAndUser(roomId: number, userId: number) {
+        return this.addedUserRoomRepository
+            .createQueryBuilder('addedUserRoom')
+            .leftJoin('room_entity', 'room', 'addedUserRoom.roomId = room.id')
+            .leftJoin('user_entity', 'user', 'addedUserRoom.userId = user.id')
+            .delete()
+            .where("room.id = :roomId", { roomId })
+            .andWhere("user.id = :userId", { userId })
+            .execute();
+    }
+
 }

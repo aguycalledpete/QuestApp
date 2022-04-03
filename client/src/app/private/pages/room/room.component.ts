@@ -124,4 +124,8 @@ export class RoomComponent implements OnInit {
     }, 50);
   }
 
+  leaveRoom() {
+    this.roomService.leaveRoom(this.room);
+  }
+
 }
