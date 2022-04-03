@@ -1,17 +1,40 @@
-p{
-    font-size: medium;
-    background-color: lightgray;
-    padding: 5px;
-    width: fit-content;
-    border-radius: 5px;
-    margin: 7px;
-}
+.message-container {
+    display: flex;
+    flex-direction: column;
 
-.ownContainer{
-    justify-content: flex-end;
-}
+    .sender {
+        padding-top: 5px;
+        font-size: small;
+    }
 
-.ownMessage {
-    background-color: lightblue;
-    align-self: flex-end;
+    .message {
+        overflow-wrap: anywhere;
+        font-size: medium;
+        background-color: lightgrey;
+        padding: 5px 10px;
+        max-width: 70%;
+        width: fit-content;
+        border-radius: 15px;
+        margin: 1px 0;
+    }
+
+    &.my-message {
+        justify-content: flex-end;
+
+        .message {
+            background-color: lightblue;
+            align-self: flex-end;
+        }
+    }
+
+    &.notification {
+        justify-content: center;
+
+        .message {
+            text-align: center;
+            font-size: small;
+            background-color: transparent;
+            align-self: center;
+        }
+    }
 }

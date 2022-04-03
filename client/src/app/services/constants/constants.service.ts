@@ -25,18 +25,21 @@ export class ConstantsService {
   SOCKET_TO_JOIN_ROOM: string = 'joinRoom';
   SOCKET_TO_LEAVE_ROOM: string = 'leaveRoom';
   SOCKET_TO_CREATE_ROOM: string = 'createRoom';
-  SOCKET_TO_FILTER_ALL_ROOMS: string = 'filterAllRooms';
+  SOCKET_TO_FILTER_ALL_ROOMS: string = 'filterPublicRooms';
   SOCKET_TO_PAGINATE_MY_ROOMS: string = 'paginateMyRooms';
-  SOCKET_TO_PAGINATE_ALL_ROOMS: string = 'paginateAllRooms';
+  SOCKET_TO_PAGINATE_ALL_ROOMS: string = 'paginatePublicRooms';
   SOCKET_FROM_MY_ROOMS: string = 'rooms';
-  SOCKET_FROM_ALL_ROOMS: string = 'allRooms';
+  SOCKET_FROM_ALL_ROOMS: string = 'publicRooms';
   SOCKET_FROM_MESSAGES: string = 'messages';
   SOCKET_FROM_MESSAGE_ADDED: string = 'messageAdded';
   SOCKET_FROM_USER_DISCONNECTED: string = 'userDisconnected';
+  SOCKET_FROM_ROOM_OPENED: string = 'roomOpened';
+  SOCKET_FROM_OPEN_ROOM_ERROR: string = 'openRoomError';
 
   // local storage
   STORAGE_TOKEN: string = 'quest_app_token';
   STORAGE_USER: string = 'user';
+  STORAGE_OPENED_ROOM: string = 'openedRoom';
 
   SECURITY_QUESTIONS: string[] = [
     'In what city were you born?',

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MessageI, RoomI, MessagePaginateI, RoomPaginateI } from 'src/app/models/interfaces';
 import { SnackBarService, ConstantsService } from 'src/app/services';
@@ -14,8 +15,11 @@ export class RoomService {
   constructor(
     private socket: CustomSocket,
     private snackBarService: SnackBarService,
-    private constantsService: ConstantsService
-  ) { }
+    private constantsService: ConstantsService,
+    private router: Router
+  ) {
+
+  }
 
   getAddedMessage(): Observable<MessageI> {
     return this.socket.fromEvent<MessageI>(this.constantsService.SOCKET_FROM_MESSAGE_ADDED);
@@ -26,19 +30,22 @@ export class RoomService {
   }
 
   openRoom(room: RoomI): void {
-    this.socket.emit(this.constantsService.SOCKET_TO_OPEN_ROOM, room);
+    this.router.navigate(['private/room'], { queryParams: { id: room.id } });
   }
 
   closeRoom(room: RoomI): void {
     this.socket.emit(this.constantsService.SOCKET_TO_CLOSE_ROOM, room);
+    this.router.navigate(['private/public-rooms']);
   }
 
   joinRoom(room: RoomI): void {
-    this.socket.emit(this.constantsService.SOCKET_TO_JOIN_ROOM, room);
+    this.socket.emit(this.constantsService.SOCKET_TO_JOIN_ROOM, room.id);
+    this.router.navigate(['private/room'], { queryParams: { id: room.id } });
   }
 
   leaveRoom(room: RoomI): void {
     this.socket.emit(this.constantsService.SOCKET_TO_LEAVE_ROOM, room);
+    this.router.navigate(['private/public-rooms']);
   }
 
   getMessages(): Observable<MessagePaginateI> {
@@ -49,11 +56,11 @@ export class RoomService {
     return this.socket.fromEvent<RoomPaginateI>(this.constantsService.SOCKET_FROM_MY_ROOMS);
   }
 
-  getAllRooms(): Observable<RoomPaginateI> {
+  getPublicRooms(): Observable<RoomPaginateI> {
     return this.socket.fromEvent<RoomPaginateI>(this.constantsService.SOCKET_FROM_ALL_ROOMS);
   }
 
-  filterAllRooms(searchValue: string): void {
+  filterPublicRooms(searchValue: string): void {
     this.socket.emit(this.constantsService.SOCKET_TO_FILTER_ALL_ROOMS, searchValue);
   }
 
@@ -62,7 +69,7 @@ export class RoomService {
     this.socket.emit(this.constantsService.SOCKET_TO_PAGINATE_MY_ROOMS, paginationOptions);
   }
 
-  emitPaginateAllRooms(limit: number = 10, page: number = 0, searchValue: string = null): void {
+  emitPaginatePublicRooms(limit: number = 10, page: number = 0, searchValue: string = null): void {
     const paginationOptions = { limit, page };
     this.socket.emit(this.constantsService.SOCKET_TO_PAGINATE_ALL_ROOMS, paginationOptions, searchValue);
   }

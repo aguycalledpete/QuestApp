@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { MessageEntity } from 'src/chat/models/message/message.entity';
 import { MessageI } from 'src/chat/models/message/message.interface';
-import { RoomI } from 'src/chat/models/room/room.interface';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -15,7 +14,8 @@ export class MessageService {
     ) { }
 
     async create(message: MessageI): Promise<MessageI> {
-        return this.messageRepository.save(this.messageRepository.create(message));
+        const createdMessage = this.messageRepository.create(message);
+        return this.messageRepository.save(createdMessage);
     }
 
     async findMessagesForRoom(roomId: number, options: IPaginationOptions): Promise<Pagination<MessageI>> {

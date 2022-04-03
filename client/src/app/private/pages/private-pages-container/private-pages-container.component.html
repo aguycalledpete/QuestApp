@@ -1,23 +1,13 @@
-<ng-container [ngSwitch]="isMobileSize">
-    <ng-container *ngSwitchCase="true" [ngTemplateOutlet]="mobileContainer"></ng-container>
-    <ng-container *ngSwitchCase="false" [ngTemplateOutlet]="desktopContainer"></ng-container>
-    <ng-container *ngSwitchDefault [ngTemplateOutlet]="desktopContainer"></ng-container>
-</ng-container>
-
-<ng-template #desktopContainer>
-    <app-page-header>
-        <ng-container *ngTemplateOutlet="router"></ng-container>
-    </app-page-header>
-</ng-template>
-
-<ng-template #mobileContainer>
-    <app-page-footer>
-        <ng-container *ngTemplateOutlet="router"></ng-container>
-    </app-page-footer>
-</ng-template>
-
-<ng-template #router>
-    <div class="content-container">
-        <router-outlet></router-outlet>
+<div class="vh-100 d-flex flex-column">
+    <div *ngIf="!isMobileSize" id="Header" class="w-100 flex-shrink-1 h-60px">
+        <app-page-header class="h1-00"></app-page-header>
     </div>
-</ng-template>
+    <div class="flex-grow-1 overflow-y-scroll">
+        <div class="content-container">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+    <div *ngIf="isMobileSize" id="Footer" class="row mx-0 w-100 flex-shrink-1 min-h-60px">
+        <app-page-footer class="w-100 h-100"></app-page-footer>
+    </div>
+</div>

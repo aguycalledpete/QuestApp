@@ -9,11 +9,11 @@ import { Router } from '@angular/router';
 export class PageHeaderComponent {
 
   constructor(
-    private router: Router
+    public router: Router
   ) { }
 
   goToRoute(route: string): void {
-    this.router.navigate([route]);
+    this.router.navigate([route]);    
   }
 
 }

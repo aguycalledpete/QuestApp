@@ -6,30 +6,44 @@
                 {{user?.username}}
             </mat-card-title>
 
-            <hr class="title-break w-100">
+            <hr class="line-break">
 
-            <div class="col-12 text-center">
-                <button mat-stroked-button type="button" (click)="goToFriendsList()">
-                    <div class="row mx-0">
-                        <div>Friends</div>
-                        <div class="pb-1">
-                            <app-icon icon="people"></app-icon>
-                        </div>
+            <div class="col-sm-6 col-12 text-sm-left text-center">
+                <div class="row">
+                    <div class="col-12">
+                        <span class="font-weight-bold">Email: </span>
+                        <span>{{user?.email}}</span>
                     </div>
-                </button>
+                </div>
             </div>
 
-            <div class="col-12 text-center">
-                <button mat-stroked-button color="warn" type="button" (click)="logOut()">
-                    <div class="row mx-0">
-                        <div>Log out</div>
-                        <div class="pb-1">
-                            <app-icon icon="meeting_room"></app-icon>
-                        </div>
-                    </div>
-                </button>
-            </div>
+            <hr class="d-sm-none line-break">
 
+            <div class="col-sm-6 col-12">
+                <div class="row">
+                    <div class="col-12 text-center py-1">
+                        <button mat-stroked-button type="button" (click)="goToFriendsList()">
+                            <div class="row mx-0">
+                                <div>Friends</div>
+                                <div class="pb-1">
+                                    <app-icon icon="people"></app-icon>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="col-12 text-center py-1">
+                        <button mat-stroked-button color="warn" type="button" (click)="logOut()">
+                            <div class="row mx-0">
+                                <div>Log out</div>
+                                <div class="pb-1">
+                                    <app-icon icon="exit_to_app"></app-icon>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </mat-card-content>
 </mat-card>

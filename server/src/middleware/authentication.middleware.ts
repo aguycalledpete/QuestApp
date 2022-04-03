@@ -18,24 +18,24 @@ export class AuthenticationMiddleware implements NestMiddleware {
     ) { }
 
     async use(req: RequestModel, res: Response, next: NextFunction) {
-        // try {
-        //     const tokenArray: string[] = req.headers['authorization'].split(' ');
-        //     const decodedToken = await this.authenticationService.verifyJwt(tokenArray[1]);
+        try {
+            const tokenArray: string[] = req.headers['authorization'].split(' ');
+            const decodedToken = await this.authenticationService.verifyJwt(tokenArray[1]);
 
-        //     // check user exists
-        //     // TODO: does this check jwt User against login User?
-        //     const foundUser: UserI = await this.userService.findOneById(decodedToken.user.id);
+            // check user exists
+            // TODO: does this check jwt User against login User?
+            const foundUser: UserI = await this.userService.findOneById(decodedToken.user.id);
 
-        //     if (!foundUser) {
-        //         throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
-        //     }
+            if (!foundUser) {
+                throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+            }
 
-        //     // add foundUser to request object
-        //     req.user = foundUser;
-        next();
-        // } catch (error) {
-        //     throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
-        // }
+            // add foundUser to request object
+            req.user = foundUser;
+            next();
+        } catch (error) {
+            throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+        }
     }
 
 }

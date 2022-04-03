@@ -17,6 +17,7 @@ import { MessageService } from '../services/message/message.service';
 import { RoomService } from '../services/room/room.service';
 import { AddedUserRoomService } from '../services/added-user-room/added-user-room.service';
 import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
+import { MessageTypeEnum } from '../models/message/message-type.enum';
 
 @WebSocketGateway({
   cors: {
@@ -70,17 +71,28 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   @SubscribeMessage('createRoom')
   async onCreateRoom(socket: Socket, room: RoomI, users: UserI[] = []): Promise<void> {
-    if (!socket || !room || !this.userExists(socket)) {
+    if (!this.userExists(socket)) {
       return;
     }
 
-    const creator: UserI = socket.data.user;
-    const usersToAdd = await this.addedUserRoomService.addUsersToRoom(users, room, creator);
-    room.users = usersToAdd;
+    // save room
     const createdRoom = await this.roomService.createRoom(room);
 
-    // emit room to connected users added to room
-    for (const addedUser of createdRoom.users) {
+    // save and add users to room
+    const creator: UserI = socket.data.user;
+    const addedUsers = await this.addedUserRoomService.addUsersToRoom(users, room, creator);
+
+    // save notification message
+    const message: MessageI = {
+      text: `${creator.username} created this room!`,
+      messageType: MessageTypeEnum.Notification,
+      user: creator,
+      room: createdRoom
+    }
+    const createdMessage = await this.messageService.create(message);
+
+    // send new room to added and currently connected users
+    for (const addedUser of addedUsers) {
       const user = addedUser.user;
       const connections = await this.connectedUserService.findByUser(user);
       if (connections.length == 0) {
@@ -93,14 +105,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       }
     }
 
+    // if created room is public, send new room to all connected users
     if (!createdRoom.isPublic) {
       return;
     }
-
     const connectedUsers = await this.connectedUserService.getAll();
     for (const connectedUser of connectedUsers) {
-      const paginatedRooms = await this.getAllPaginatedRooms(this.defaultPagination);
-      await this.server.to(connectedUser.socketId).emit('allRooms', paginatedRooms);
+      const publicPaginatedRooms = await this.getPublicPaginatedRooms(this.defaultPagination);
+      await this.server.to(connectedUser.socketId).emit('publicRooms', publicPaginatedRooms);
     }
   }
 
@@ -110,18 +122,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       return;
     }
 
-    try {
-      const paginationOptions = this.handleIncomingPageRequest(page);
-      const user: UserI = socket.data.user;
-      const paginatedRooms = await this.getMyPaginatedRooms(paginationOptions, user.id);
-      this.server.to(socket.id).emit('rooms', paginatedRooms);
-    } catch (error) {
-      return;
-    }
+    const paginationOptions = this.handleIncomingPageRequest(page);
+    const user: UserI = socket.data.user;
+    const paginatedRooms = await this.getMyPaginatedRooms(paginationOptions, user.id);
+    this.server.to(socket.id).emit('rooms', paginatedRooms);
   }
 
-  @SubscribeMessage('paginateAllRooms')
-  async onPaginateAllRooms(socket: Socket, params: any): Promise<void> {
+  @SubscribeMessage('paginatePublicRooms')
+  async onPaginatePublicRooms(socket: Socket, params: any): Promise<void> {
     if (!this.userExists(socket)) {
       return;
     }
@@ -129,47 +137,78 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     const page: PageI = params[0];
     const searchValue: string = params[1];
 
-    try {
-      const paginationOptions = this.handleIncomingPageRequest(page);
-      const paginatedRooms = await this.getAllPaginatedRooms(paginationOptions, searchValue);
-      this.server.to(socket.id).emit('allRooms', paginatedRooms);
-    } catch (error) {
-      return;
-    }
+    const paginationOptions = this.handleIncomingPageRequest(page);
+    const paginatedRooms = await this.getPublicPaginatedRooms(paginationOptions, searchValue);
+    this.server.to(socket.id).emit('publicRooms', paginatedRooms);
   }
 
-  @SubscribeMessage('filterAllRooms')
-  async onFilterAllRooms(socket: Socket, searchValue: string): Promise<void> {
+  @SubscribeMessage('filterPublicRooms')
+  async onFilterPublicRooms(socket: Socket, searchValue: string): Promise<void> {
     if (!this.userExists(socket)) {
       return;
     }
 
     try {
-      const paginatedRooms = await this.getAllPaginatedRooms(this.defaultPagination, searchValue);
-      this.server.to(socket.id).emit('allRooms', paginatedRooms);
+      const paginatedRooms = await this.getPublicPaginatedRooms(this.defaultPagination, searchValue);
+      this.server.to(socket.id).emit('publicRooms', paginatedRooms);
     } catch (error) {
       return;
     }
   }
 
   @SubscribeMessage('openRoom')
-  async onOpenRoom(socket: Socket, room: RoomI): Promise<void> {
+  async onOpenRoom(socket: Socket, roomId: number): Promise<void> {
     if (!this.userExists(socket)) {
       return;
     }
 
-    const paginatedMessages = await this.messageService.findMessagesForRoom(room.id, this.defaultPagination);
-    // subtract page -1 to match angular material paginator
-    paginatedMessages.meta.currentPage--;
+    const room = await this.roomService.getRoomById(roomId);
+    const user: UserI = socket.data.user;
+    const isUserAddedRoom = await this.addedUserRoomService.isUserIdAddedToRoom(room.id, user.id);
+    if (!isUserAddedRoom) {
+      await this.server.to(socket.id).emit('openRoomError', 'User not added to room');
+      return;
+    }
+    await this.server.to(socket.id).emit('roomOpened', room);
+
     // save connection to room
     const connectedUserRoom: ConnectedUserRoomI = {
       socketId: socket.id,
-      user: socket.data.user,
-      room
+      user, room
     };
     await this.connectedUserRoomService.create(connectedUserRoom)
-    //send most recent messages to user
+
+    // send most recent messages to user
+    const paginatedMessages = await this.messageService.findMessagesForRoom(room.id, this.defaultPagination);
+    // subtract page -1 to match angular material paginator
+    paginatedMessages.meta.currentPage--;
     await this.server.to(socket.id).emit('messages', paginatedMessages);
+  }
+
+  @SubscribeMessage('joinRoom')
+  async onJoinRoom(socket: Socket, roomId: number): Promise<void> {
+    if (!this.userExists(socket)) {
+      return;
+    }
+
+    // add user to room
+    const room = await this.roomService.getRoomById(roomId);
+    const user: UserI = socket.data.user;
+    const addedUsers = await this.addedUserRoomService.addUsersToRoom([user], room);
+
+    // save notification message
+    const message: MessageI = {
+      text: `${user.username} has joined!`,
+      messageType: MessageTypeEnum.Notification,
+      user, room
+    }
+    const createdMessage = await this.messageService.create(message);
+
+    // send message to connected users in the room
+    const connectedUserRooms = await this.connectedUserRoomService.findByRoom(room);
+    for (const user of connectedUserRooms) {
+      await this.server.to(user.socketId).emit('messageAdded', createdMessage);
+    }
   }
 
   @SubscribeMessage('closeRoom')
@@ -188,12 +227,15 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       return;
     }
 
+    // save message
     const user: UserI = socket.data.user;
     message.user = user;
     const createdMessage = await this.messageService.create(message);
-    const room = await this.roomService.getRoom(createdMessage.room.id);
+
+
+    // send message to connected users in the room
+    const room = await this.roomService.getRoomById(createdMessage.room.id);
     const connectedUserRooms = await this.connectedUserRoomService.findByRoom(room);
-    // Send message to all connected users 
     for (const user of connectedUserRooms) {
       await this.server.to(user.socketId).emit('messageAdded', createdMessage);
     }
@@ -253,7 +295,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     return paginatedRooms;
   }
 
-  private async getAllPaginatedRooms(paginationOptions: IPaginationOptions, searchValue?: string): Promise<Pagination<RoomI>> {
+  private async getPublicPaginatedRooms(paginationOptions: IPaginationOptions, searchValue?: string): Promise<Pagination<RoomI>> {
     let paginatedRooms: Pagination<RoomI>;
     try {
       if (searchValue) {

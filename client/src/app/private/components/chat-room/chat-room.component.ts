@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { combineLatest, map, startWith, Subscription } from 'rxjs';
+import { MessageTypeEnum } from 'src/app/models/enums/message-type.enum';
 import { MessageI, MessagePaginateI, RoomI } from 'src/app/models/interfaces';
 import { RoomService } from '../../services';
 
@@ -72,7 +73,8 @@ export class ChatRoomComponent implements OnInit, OnChanges, OnDestroy, AfterVie
   sendMessage(): void {
     const messageToSend: MessageI = {
       text: this.chatMessage.value,
-      room: this.chatRoom
+      room: this.chatRoom,
+      messageType: MessageTypeEnum.Normal
     };
     this.roomService.sendMessage(messageToSend);
     this.chatMessage.reset();

@@ -27,7 +27,7 @@ export class ProcessLoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // set subscription for login confirmation on web socket
     const loginConfirmedSubscription =
-      this.socket.fromEvent<any>(this.constantsService.SOCKET_FROM_LOGIN_CONFIRMED).pipe(
+      this.socket.fromEvent<boolean>(this.constantsService.SOCKET_FROM_LOGIN_CONFIRMED).pipe(
         timeout(10000),
         catchError(() => of(false))
       ).subscribe(isLoginConfirmed => {

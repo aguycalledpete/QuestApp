@@ -22,8 +22,7 @@ export class ProfileService {
     this.socket.emit(this.constantsService.SOCKET_TO_LOGOUT);
     this.localStorageService.delete(this.constantsService.STORAGE_USER);
     this.localStorageService.delete(this.constantsService.STORAGE_TOKEN);
-    const user = this.userService.loggedInUser;
-    this.snackBarService.displayMatSnackBar(`Logged out as ${user.username}`);
+    this.snackBarService.displayMatSnackBar('Logged out');
     this.userService.loggedInUser = null;
     this.router.navigate(['public/login']);
   }

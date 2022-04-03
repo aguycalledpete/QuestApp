@@ -18,8 +18,8 @@ export class RoomService {
         return createdRoom;
     }
 
-    async getRoom(roomId: number): Promise<RoomI> {
-        const foundRoom = this.roomRepository.findOne(roomId);
+    async getRoomById(id: number): Promise<RoomI> {
+        const foundRoom = this.roomRepository.findOne({ id });
         return foundRoom;
     }
 
@@ -49,7 +49,7 @@ export class RoomService {
         const query = this.roomRepository
             .createQueryBuilder('room')
             .where('room.isPublic = true')
-            .andWhere("room.title like :title", { title:`%${searchValue}%` })
+            .andWhere("room.title like :title", { title: `%${searchValue}%` })
             .orderBy('room.updatedAt', 'DESC');
 
         const result = paginate(query, options);

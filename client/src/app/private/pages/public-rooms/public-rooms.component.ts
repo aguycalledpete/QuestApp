@@ -27,8 +27,8 @@ export class PublicRoomsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const getAllRoomsSubscription =
-      this.roomService.getAllRooms().pipe(
+    const getPublicRoomsSubscription =
+      this.roomService.getPublicRooms().pipe(
         tap(paginatedRooms => {
           if (this.searchRoom.value != null) {
             this.paginatedRooms = paginatedRooms;
@@ -43,18 +43,18 @@ export class PublicRoomsComponent implements OnInit, OnDestroy {
       ).subscribe(paginatedRooms => {
         this.paginatedRooms = paginatedRooms;
       });
-    this.subscription.add(getAllRoomsSubscription);
+    this.subscription.add(getPublicRoomsSubscription);
 
     const searchRoomSubscription =
       this.searchRoom.valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged()
       ).subscribe((roomTitle: string) => {
-        this.roomService.filterAllRooms(roomTitle);
+        this.roomService.filterPublicRooms(roomTitle);
       });
     this.subscription.add(searchRoomSubscription);
 
-    this.roomService.emitPaginateAllRooms();
+    this.roomService.emitPaginatePublicRooms();
   }
 
   ngOnDestroy(): void {
@@ -68,7 +68,7 @@ export class PublicRoomsComponent implements OnInit, OnDestroy {
   onPaginateRooms(pageEvent: PageEvent) {
     this.waitingForPagination = true;
     const searchValue = this.searchRoom.value as string;
-    this.roomService.emitPaginateAllRooms(pageEvent.pageSize, pageEvent.pageIndex, searchValue);
+    this.roomService.emitPaginatePublicRooms(pageEvent.pageSize, pageEvent.pageIndex, searchValue);
   }
 
   joinRoom(event: any): void {
