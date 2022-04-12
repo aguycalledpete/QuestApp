@@ -22,6 +22,7 @@ export class UserController {
     const createdUser = await this.userService.create(userEntity);
     return createdUser;
   }
+  
   @Post('answer-question')
   async answerQuestion(@Body() securityCheckUserDto: SecurityCheckUserDto): Promise<boolean> {
     const userEntity = this.userHelperService.securityCheckUserDtoToEntity(securityCheckUserDto);
